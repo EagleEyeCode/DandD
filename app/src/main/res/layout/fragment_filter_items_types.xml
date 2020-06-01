@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp">
+
+        <CheckBox
+            android:id="@+id/filter_items_type_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/light_armor"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/medium_armor"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/heavy_armor"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shield"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/melee_weapon"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ranged_weapon"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ammunition"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rod"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/staff"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wand"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ring"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/potion"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/scroll"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wondrous_item"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wealth"/>
+
+        <CheckBox
+            android:id="@+id/filter_items_type_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/adventuring_gear"/>
+
+    </LinearLayout>
+
+</ScrollView>

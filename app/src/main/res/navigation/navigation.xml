@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    app:startDestination="@id/nav_rules">
+
+    <fragment
+        android:id="@+id/nav_handbook"
+        android:name="de.eagleeye.dandd.fragments.main.HandbookFragment"
+        android:label="@string/players_handbook" />
+    <fragment
+        android:id="@+id/nav_rules"
+        android:name="de.eagleeye.dandd.fragments.main.RulesFragment"
+        android:label="@string/basic_rules" />
+    <fragment
+        android:id="@+id/nav_items"
+        android:name="de.eagleeye.dandd.fragments.main.ItemsFragment"
+        android:label="@string/items" />
+    <fragment
+        android:id="@+id/nav_monsters"
+        android:name="de.eagleeye.dandd.fragments.main.MonstersFragment"
+        android:label="@string/monsters" />
+    <fragment
+        android:id="@+id/nav_spells"
+        android:name="de.eagleeye.dandd.fragments.main.SpellsFragment"
+        android:label="@string/spells" />
+    <fragment
+        android:id="@+id/nav_items_filter"
+        android:name="de.eagleeye.dandd.fragments.filter.items.FilterItemsFragment"
+        android:label="@string/items_filter" />
+    <fragment
+        android:id="@+id/nav_spells_filter"
+        android:name="de.eagleeye.dandd.fragments.filter.spells.FilterSpellsFragment"
+        android:label="@string/spells_filter" />
+</navigation>

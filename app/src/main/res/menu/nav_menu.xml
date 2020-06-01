@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_rules"
+        android:title="@string/basic_rules"/>
+
+    <item
+        android:id="@+id/nav_handbook"
+        android:title="@string/players_handbook" />
+
+    <item
+        android:id="@+id/nav_items"
+        android:title="@string/items" />
+
+    <item
+        android:id="@+id/nav_spells"
+        android:title="@string/spells" />
+
+    <item
+        android:id="@+id/nav_monsters"
+        android:title="@string/monsters" />
+</menu>

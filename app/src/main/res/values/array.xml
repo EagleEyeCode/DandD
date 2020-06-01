@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <string-array name="filter_operations">
+        <item>&gt;=</item>
+        <item>&gt;</item>
+        <item>&lt;=</item>
+        <item>&lt;</item>
+        <item>==</item>
+    </string-array>
+
+    <string-array name="filter_items_type">
+        <item>Select Types</item>
+        <item>Light Armor</item>
+        <item>Medium Armor</item>
+        <item>Heavy Armor</item>
+        <item>Shield</item>
+        <item>Melee Weapon</item>
+        <item>Ranged Weapon</item>
+        <item>Ammunition</item>
+        <item>Rod</item>
+        <item>Staff</item>
+        <item>Wand</item>
+        <item>Ring</item>
+        <item>Potion</item>
+        <item>Scroll</item>
+        <item>Wondrous Item</item>
+        <item>Wealth</item>
+        <item>Adventuring Gear</item>
+    </string-array>
+
+    <string-array name="filter_spells_range_classes">
+        <item>None</item>
+        <item>Normal</item>
+        <item>Self</item>
+        <item>Self Radius Hemisphere</item>
+        <item>Self Radius Sphere</item>
+        <item>Self Radius</item>
+        <item>Self Line</item>
+        <item>Self Cone</item>
+        <item>Self Cube</item>
+        <item>Sight</item>
+        <item>Special</item>
+        <item>Touch</item>
+        <item>Unlimited</item>
+    </string-array>
+
+    <string-array name="filter_spells_range_units">
+        <item>Ignore</item>
+        <item>Foot</item>
+        <item>Mile/s</item>
+    </string-array>
+
+    <string-array name="filter_spells_duration_classes">
+        <item>None</item>
+        <item>Normal</item>
+        <item>Concentration, up to</item>
+        <item>Up to</item>
+        <item>Instantaneous</item>
+        <item>Until dispelled</item>
+        <item>Until dispelled and triggered</item>
+    </string-array>
+
+    <string-array name="filter_spells_duration_units">
+        <item>Ignore</item>
+        <item>Minute/s</item>
+        <item>Hour/s</item>
+        <item>Day/s</item>
+        <item>Round/s</item>
+    </string-array>
+</resources>

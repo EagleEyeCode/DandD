@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/value"
+                android:layout_weight="0.4"
+                android:layout_gravity="center"/>
+
+            <Spinner
+                android:id="@+id/filter_items_value_operation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:layout_gravity="center"
+                android:entries="@array/filter_operations"/>
+
+            <EditText
+                android:id="@+id/filter_items_value_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:inputType="numberDecimal"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/weight"
+                android:layout_weight="0.4"
+                android:layout_gravity="center"/>
+
+            <Spinner
+                android:id="@+id/filter_items_weight_operation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:layout_gravity="center"
+                android:entries="@array/filter_operations"/>
+
+            <EditText
+                android:id="@+id/filter_items_weight_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:inputType="numberDecimal"
+                android:autofillHints="@string/weight" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/magic"
+            android:gravity="center"/>
+
+        <RadioGroup
+            android:id="@+id/filter_items_magic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/filter_items_magic_only"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/only"
+                android:layout_weight="0.33"/>
+
+            <RadioButton
+                android:id="@+id/filter_items_magic_both"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/both"
+                android:layout_weight="0.34"/>
+
+            <RadioButton
+                android:id="@+id/filter_items_magic_none"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/none"
+                android:layout_weight="0.33"/>
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/range"
+        android:gravity="center"
+        android:layout_marginTop="15dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <Spinner
+            android:id="@+id/filter_spells_range_operation"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:entries="@array/filter_operations"
+            android:layout_weight="0.33"/>
+
+        <EditText
+            android:id="@+id/filter_spells_range_value"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:hint="@string/value"
+            android:layout_weight="0.34"
+            android:inputType="number"/>
+
+        <Spinner
+            android:id="@+id/filter_spells_range_unit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:entries="@array/filter_spells_range_units"
+            android:layout_weight="0.33"/>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/duration"
+        android:gravity="center"
+        android:layout_marginTop="15dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <Spinner
+            android:id="@+id/filter_spells_duration_operation"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:entries="@array/filter_operations"
+            android:layout_weight="0.33"/>
+
+        <EditText
+            android:id="@+id/filter_spells_duration_value"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:hint="@string/value"
+            android:layout_weight="0.34"
+            android:inputType="number"/>
+
+        <Spinner
+            android:id="@+id/filter_spells_duration_unit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:entries="@array/filter_spells_duration_units"
+            android:layout_weight="0.33"/>
+
+    </LinearLayout>
+
+</LinearLayout>

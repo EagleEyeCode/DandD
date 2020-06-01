@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.LoginActivity"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/login_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="Dungeons &amp; Dragons"
+            app:subtitle="Connect to Sever"
+            app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="100dp"
+        android:paddingHorizontal="20dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/logo_red_transparent_full"/>
+
+        <EditText
+            android:id="@+id/login_ip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="@string/server_ip"/>
+
+        <EditText
+            android:id="@+id/login_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="@string/username"/>
+
+        <EditText
+            android:id="@+id/login_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="@string/password"/>
+
+        <Button
+            android:id="@+id/login_btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/loginButtonColor"
+            android:shadowColor="@color/loginButtonColor"
+            android:outlineAmbientShadowColor="@color/loginButtonColor"
+            android:outlineSpotShadowColor="@color/loginButtonColor"/>
+
+    </LinearLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/login_bottom_controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_behavior=".MoveUpwardBehavior"
+            android:layout_gravity="bottom">
+
+            <Button
+                android:id="@+id/login_btn_offline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/offline"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/loginButtonColor"
+                android:shadowColor="@color/loginButtonColor"
+                android:outlineAmbientShadowColor="@color/loginButtonColor"
+                android:outlineSpotShadowColor="@color/loginButtonColor"
+                android:layout_weight="0.5"/>
+
+            <Button
+                android:id="@+id/login_btn_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/loginButtonColor"
+                android:shadowColor="@color/loginButtonColor"
+                android:outlineAmbientShadowColor="@color/loginButtonColor"
+                android:outlineSpotShadowColor="@color/loginButtonColor"
+                android:layout_weight="0.5"/>
+
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</RelativeLayout>
