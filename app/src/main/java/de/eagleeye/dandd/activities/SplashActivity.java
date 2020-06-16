@@ -1,10 +1,8 @@
 package de.eagleeye.dandd.activities;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
@@ -28,9 +26,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.file.Files;
 import java.sql.ResultSet;
-import java.util.List;
+import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -41,6 +38,7 @@ import de.eagleeye.dandd.sql.SQLRequest;
 
 public class SplashActivity extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 1000;
+    private final String[] TABLES = new String[]{"abilities", "actions", "alignments", "attacks", "classes", "fileTypes", "files", "itemTypes", "items", "languages", "monsterAbilities", "monsterAction", "monsterArmors", "monsterLanguages", "monsterTypes", "monsters", "savingThrows", "sources", "spellSchools", "spells", "spellsClasses", "traits"};
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -50,33 +48,6 @@ public class SplashActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         new UpdateTask().execute("");
-    }
-
-    private void parseZip(){
-//        TextView tv = findViewById(R.id.splash_status);
-//        tv.setText(R.string.unpacking);
-//
-//        deleteDirectory(getDatabasePath("data.db"));
-//        deleteDirectory(getFileStreamPath("pdf"));
-//        deleteDirectory(getFileStreamPath("images"));
-//
-//        boolean parsed = true;
-//        try {
-//            File zip = new File(getFileStreamPath("download"), "dandd_version_" + newestVersion + ".zip");
-//            unzip(zip.getPath(), getFileStreamPath("").getPath());
-//        } catch (IOException e) {
-//            Log.d(SplashActivity.class.getSimpleName(), "Unzip failed:", e);
-//            parsed = false;
-//        }
-//
-//        if(parsed){
-//            parsed = moveFile(getFileStreamPath("data.db"), getDatabasePath("data.db"));
-//        }
-//
-//        new File(getFileStreamPath("download"), "dandd_version_" + newestVersion + ".zip").delete();
-//
-//        if(parsed) newestVersion = version;
-//        validateData();
     }
 
     private boolean deleteDirectory(File directoryToBeDeleted) {
@@ -89,53 +60,7 @@ public class SplashActivity extends AppCompatActivity {
         return directoryToBeDeleted.delete();
     }
 
-    private void validateData(){
-//        TextView tv = findViewById(R.id.splash_status);
-//        tv.setText(R.string.check_db);
-//        if(getDatabasePath("data.db").exists() && getDatabasePath("data.db").isFile()) {
-//            BasicSQLiteHelper sqLiteHelper = new BasicSQLiteHelper(this, "data.db");
-//            SQLRequest request = new SQLRequest("SELECT path FROM files", new SQLRequest.OnQueryResult() {
-//                @Override
-//                public void onMySQLQueryResult(ResultSet resultSet) {
-//                }
-//
-//                @Override
-//                public void onSQLiteQueryResult(Cursor cursor) {
-//                    tv.setText(R.string.check_files);
-//                    boolean valid = true;
-//                    if (cursor.getCount() == 0) valid = false;
-//
-//                    cursor.moveToFirst();
-//                    do {
-//                        if (!valid) break;
-//                        File f = getFileStreamPath("");
-//                        for(String s : cursor.getString(0).split("/")) {
-//                            f = new File(f, s);
-//                        }
-//                        valid = f.exists() && f.isFile();
-//                    } while (cursor.moveToNext());
-//
-//                    if (valid) {
-//                        tv.setText(R.string.finished);
-//                        new Handler().postDelayed(() -> {
-//                            Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-//                            SplashActivity.this.startActivity(mainIntent);
-//                            SplashActivity.this.finish();
-//                        }, SPLASH_DISPLAY_LENGTH);
-//                        version = newestVersion;
-//                        getPreferences(MODE_PRIVATE).edit().putInt("version", version).apply();
-//                    } else {
-//                        showDataNotValidDialog();
-//                    }
-//                }
-//            });
-//            sqLiteHelper.query(request);
-//        }else{
-//            showDataNotValidDialog();
-//        }
-    }
-
-    private void showDataNotValidDialog(){
+    private void showDataNotValidDialog() {
 //        AlertDialog dialog;
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //
@@ -155,7 +80,7 @@ public class SplashActivity extends AppCompatActivity {
 //        dialog.show();
     }
 
-    private class UpdateTask extends AsyncTask<String, String, String>{
+    private class UpdateTask extends AsyncTask<String, String, String> {
 
         @Override
         protected void onPreExecute() {
@@ -166,15 +91,16 @@ public class SplashActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             updateStatus("Checking for Updates");
             downloadFile("packages.json");
-            if(fileExists(getFileStreamPath("download").getPath() + "/packages.json")){
+            if (fileExists(getFileStreamPath("download").getPath() + "/packages.json")) {
                 JSONArray updateList = getPackageUpdateList();
-                for(int i = 0; i < updateList.length(); i++){
+                for (int i = 0; i < updateList.length(); i++) {
                     try {
                         JSONObject pack = updateList.getJSONObject(i);
-                        switch (pack.getString("action")){
+                        switch (pack.getString("action")) {
                             case "install":
                                 updateStatus("Installing " + pack.getString("name"));
                                 installPackage(pack);
+                                pack.put("installed", true);
                                 break;
                             case "update":
                                 updateStatus("Updating " + pack.getString("name"));
@@ -183,14 +109,15 @@ public class SplashActivity extends AppCompatActivity {
                             case "remove":
                                 updateStatus("Removing " + pack.getString("name"));
                                 removePackage(pack);
+                                pack.put("installed", false);
                                 break;
                         }
                     } catch (Exception e) {
                         Log.d(SplashActivity.this.getClass().getSimpleName(), "UpdateTask:", e);
                     }
                 }
-
-            }else{
+                getSharedPreferences("packages", MODE_PRIVATE).edit().putString("current", updateList.toString()).apply();
+            } else {
                 //Necessary Update not possible
                 updateStatus("Check Internet connection!");
                 return "";
@@ -202,13 +129,13 @@ public class SplashActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             if (s == null) {
                 sendToMainActivity();
-            }else{
+            } else {
                 new Handler().postDelayed(SplashActivity.this::finish, SPLASH_DISPLAY_LENGTH);
             }
             super.onPostExecute(s);
         }
 
-        private void sendToMainActivity(){
+        private void sendToMainActivity() {
             updateStatus("Finished");
             new Handler().postDelayed(() -> {
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
@@ -216,62 +143,63 @@ public class SplashActivity extends AppCompatActivity {
             }, SPLASH_DISPLAY_LENGTH);
         }
 
-        private void updateStatus(String string){
+        private void updateStatus(String string) {
             runOnUiThread(() -> {
                 TextView tv = findViewById(R.id.splash_status);
                 tv.setText(string);
             });
         }
 
-        private boolean fileExists(String path){
+        private boolean fileExists(String path) {
             return new File(path).exists();
         }
 
-        private JSONArray getPackageUpdateList(){
-            String currentPackagesString = getSharedPreferences("packages", MODE_PRIVATE).getString("current", "[{name='BaseData', version=1, installed=False, wanted=True}]");
-
+        private JSONArray getPackageUpdateList() {
+            String currentPackagesString = getSharedPreferences("packages", MODE_PRIVATE).getString("current", "[{name='Base Data', id=0, version=1, installed=False, wanted=True}, {name='Players Handbook', id=1, version=1, installed=False, wanted=True}]");
+            //String currentPackagesString = "[{name='Base Data', id=0, version=1, installed=False, wanted=True}, {name='Players Handbook', id=1, version=1, installed=False, wanted=True}]"
             try {
                 File packagesFile = new File(getFileStreamPath("download").getPath() + "/packages.json");
                 Scanner scanner = new Scanner(packagesFile);
                 StringBuilder allPackagesString = new StringBuilder();
-                while (scanner.hasNext()){
+                while (scanner.hasNext()) {
                     allPackagesString.append(scanner.next());
                 }
 
                 JSONArray currentPackages = new JSONArray(currentPackagesString);
                 JSONArray allPackages = new JSONArray(allPackagesString.toString());
 
-                for (int i = 0; i < allPackages.length(); i++){
+                for (int i = 0; i < allPackages.length(); i++) {
                     allPackages.getJSONObject(i).put("action", "none");
-                    String name = allPackages.getJSONObject(i).getString("name");
+                    int id = allPackages.getJSONObject(i).getInt("id");
                     int version = allPackages.getJSONObject(i).getInt("version");
-                    for(int j = 0; j < currentPackages.length(); j++){
+                    for (int j = 0; j < currentPackages.length(); j++) {
                         JSONObject current = currentPackages.getJSONObject(j);
-                        if(current.getString("name").equals(name)){
-                            if(current.getBoolean("wanted")){
-                                if(current.getBoolean("installed")){
-                                    if(version > current.getInt("version")){
+                        if (current.getInt("id") == id) {
+                            if (current.getBoolean("wanted")) {
+                                if (current.getBoolean("installed")) {
+                                    if (version > current.getInt("version")) {
                                         allPackages.getJSONObject(i).put("action", "update");
                                     }
-                                }else{
+                                } else {
                                     allPackages.getJSONObject(i).put("action", "install");
                                 }
-                            }else{
-                                if(!current.getBoolean("installed")){
+                            } else {
+                                if (current.getBoolean("installed")) {
                                     allPackages.getJSONObject(i).put("action", "remove");
                                 }
                             }
+                            allPackages.getJSONObject(i).put("wanted", current.getBoolean("wanted"));
                         }
                     }
                 }
                 return allPackages;
-            } catch (Exception e){
+            } catch (Exception e) {
                 Log.d(SplashActivity.this.getClass().getSimpleName(), "needsUpdate():", e);
             }
             return new JSONArray();
         }
 
-        private void downloadFile(String file){
+        private void downloadFile(String file) {
             int count;
             try {
                 URL url = new URL("http://RaspBox/download.php?file=" + file);
@@ -279,7 +207,7 @@ public class SplashActivity extends AppCompatActivity {
                 connection.connect();
 
                 File path = getFileStreamPath("download");
-                if(!path.mkdir()){
+                if (!path.mkdir()) {
                     Log.d(SplashActivity.this.getClass().getSimpleName(), "downloadFile(): could not make directories");
                 }
 
@@ -299,7 +227,7 @@ public class SplashActivity extends AppCompatActivity {
                 input.close();
 
             } catch (Exception e) {
-                Log.e(SplashActivity.class.getSimpleName(), "File download:",  e);
+                Log.e(SplashActivity.class.getSimpleName(), "File download:", e);
             }
         }
 
@@ -334,12 +262,12 @@ public class SplashActivity extends AppCompatActivity {
             bos.close();
         }
 
-        private boolean moveFile(File file, File destinationFile){
-            if(file.renameTo(destinationFile)) {
+        private boolean moveFile(File file, File destinationFile) {
+            if (file.renameTo(destinationFile)) {
                 //noinspection ResultOfMethodCallIgnored
                 file.delete();
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
@@ -356,19 +284,27 @@ public class SplashActivity extends AppCompatActivity {
             }
 
             String dbName = pack.getString("file").replace("_" + pack.getString("file").split("_")[pack.getString("file").split("_").length - 1], ".db");
-            if(unzipped){
+            if (unzipped) {
                 unzipped = moveFile(getFileStreamPath(dbName), getDatabasePath(dbName));
             }
 
-            if(unzipped) {
+            if (unzipped) {
                 unzipped = new File(getFileStreamPath("download"), pack.getString("file") + ".zip").delete();
             }
 
-            mergeDatabase(getDatabasePath(dbName));
+            mergeDatabase(dbName);
 
-            if(unzipped){
+            if (unzipped) {
+                unzipped = getDatabasePath(dbName).delete();
+            }
+
+            if (unzipped) {
+                unzipped = getDatabasePath(dbName + "-journal").delete();
+            }
+
+            if (unzipped) {
                 Log.d(SplashActivity.this.getClass().getSimpleName(), "Successfully installed " + pack.getString("name"));
-            }else{
+            } else {
                 Log.d(SplashActivity.this.getClass().getSimpleName(), "Failed to install " + pack.getString("name"));
             }
         }
@@ -378,13 +314,79 @@ public class SplashActivity extends AppCompatActivity {
             installPackage(pack);
         }
 
-        private void removePackage(JSONObject pack){
-            //TODO: Remove Packages
+        private void removePackage(JSONObject pack) throws JSONException {
+            BasicSQLiteHelper data = new BasicSQLiteHelper(SplashActivity.this, "data.db");
+            data.query(new SQLRequest("SELECT path FROM files WHERE sourceId=" + pack.getString("id") + ";", new SQLRequest.OnQueryResult() {
+                @Override
+                public void onMySQLQueryResult(ResultSet resultSet) {
+
+                }
+
+                @Override
+                public void onSQLiteQueryResult(Cursor cursor) {
+                    if(cursor != null){
+                        cursor.moveToFirst();
+                        do{
+                            //noinspection ResultOfMethodCallIgnored
+                            new File(getFileStreamPath(""), cursor.getString(0)).delete();
+                        } while (cursor.moveToNext());
+                    }
+                }
+            }), true);
+
+            for (String table : TABLES){
+                switch (table){
+                    case "sources":
+                        data.query(new SQLRequest("DELETE FROM sources WHERE id=" + pack.getString("id")), true);
+                        break;
+                    case "spellsClasses":
+                        data.query(new SQLRequest("DELETE FROM " + table + " WHERE spellSourceId=" + pack.getString("id")), true);
+                        break;
+                    case "monsterAbilities":
+                    case "monsterLanguages":
+                    case "monsterAction":
+                        data.query(new SQLRequest("DELETE FROM " + table + " WHERE monsterSourceId=" + pack.getString("id")), true);
+                        break;
+                    default:
+                        data.query(new SQLRequest("DELETE FROM " + table + " WHERE sourceId=" + pack.getString("id")), true);
+                        break;
+                }
+            }
         }
 
-        private void mergeDatabase(File db){
-            //TODO: MergeDatabase
-            //TODO: Download Empty Database if needed
+        private void mergeDatabase(String db) {
+            if (!fileExists(getDatabasePath("data.db").getPath())) {
+                downloadFile("data.db");
+                moveFile(new File(getFileStreamPath("download"), "data.db"), getDatabasePath("data.db"));
+            }
+            BasicSQLiteHelper data = new BasicSQLiteHelper(SplashActivity.this, "data.db");
+            BasicSQLiteHelper pack = new BasicSQLiteHelper(SplashActivity.this, db);
+
+            for (String table : TABLES) {
+                SQLRequest read = new SQLRequest("SELECT * FROM " + table, new SQLRequest.OnQueryResult() {
+                    @Override
+                    public void onMySQLQueryResult(ResultSet resultSet) {
+
+                    }
+
+                    @Override
+                    public void onSQLiteQueryResult(Cursor cursor) {
+                        if(cursor != null) {
+                            cursor.moveToFirst();
+                            do {
+                                int columns = cursor.getColumnCount();
+                                StringBuilder dataString = new StringBuilder();
+                                for (int i = 0; i < columns; i++) {
+                                    if (dataString.length() != 0) dataString.append(", ");
+                                    dataString.append('"').append(cursor.getString(i)).append('"');
+                                }
+                                data.query(new SQLRequest("INSERT INTO " + table + " VALUES (" + dataString.toString() + ");"), true);
+                            } while (cursor.moveToNext());
+                        }
+                    }
+                });
+                pack.query(read, true);
+            }
         }
     }
 }

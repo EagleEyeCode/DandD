@@ -46,6 +46,25 @@ public class BasicSQLiteHelper extends SQLiteOpenHelper {
         new QueryTask().execute(request);
     }
 
+    public void query(@NonNull SQLRequest request, boolean wait){
+        if(wait){
+            Cursor cursor = null;
+            SQLiteDatabase db;
+            Log.d("Performing Query", request.getQuery());
+            if((db = getWritableDatabase()) != null){
+                cursor = db.rawQuery(request.getQuery(), null);
+            }
+
+            if(cursor == null || cursor.getCount() == 0){
+                if(request.getOnQueryResult() != null) request.getOnQueryResult().onSQLiteQueryResult(null);
+            }else{
+                if(request.getOnQueryResult() != null) request.getOnQueryResult().onSQLiteQueryResult(cursor);
+            }
+        }else{
+            new QueryTask().execute(request);
+        }
+    }
+
     private class QueryTask extends AsyncTask<SQLRequest, Void, Void>{
         SQLRequest request;
         Cursor cursor;
