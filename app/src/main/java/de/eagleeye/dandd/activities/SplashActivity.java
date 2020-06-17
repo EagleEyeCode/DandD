@@ -1,16 +1,16 @@
 package de.eagleeye.dandd.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,9 +26,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -50,45 +49,26 @@ public class SplashActivity extends AppCompatActivity {
         new UpdateTask().execute("");
     }
 
-    private boolean deleteDirectory(File directoryToBeDeleted) {
-        File[] allContents = directoryToBeDeleted.listFiles();
-        if (allContents != null) {
-            for (File file : allContents) {
-                deleteDirectory(file);
-            }
-        }
-        return directoryToBeDeleted.delete();
-    }
-
     private void showDataNotValidDialog() {
-//        AlertDialog dialog;
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//
-//        builder.setTitle("Data Not Valid!").setNeutralButton("Quit", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                finish();
-//            }
-//        }).setPositiveButton("(Re)Download", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                downloadFiles();
-//            }
-//        }).setCancelable(false);
-//
-//        dialog = builder.create();
-//        dialog.show();
+        AlertDialog dialog;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Data Not Valid!").setNeutralButton("Quit", (dialog1, which) -> finish())
+                .setPositiveButton("Clean Reinstall", (dialog12, which) -> new UpdateTask().execute("clean")).setCancelable(false);
+
+        dialog = builder.create();
+        dialog.show();
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class UpdateTask extends AsyncTask<String, String, String> {
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
         protected String doInBackground(String... strings) {
+            if(strings.length != 0 && strings[0].equals("clean")){
+                deleteAllData();
+            }
+
             updateStatus("Checking for Updates");
             downloadFile("packages.json");
             if (fileExists(getFileStreamPath("download").getPath() + "/packages.json")) {
@@ -114,25 +94,37 @@ public class SplashActivity extends AppCompatActivity {
                         }
                     } catch (Exception e) {
                         Log.d(SplashActivity.this.getClass().getSimpleName(), "UpdateTask:", e);
+                        return "not_valid";
                     }
                 }
                 getSharedPreferences("packages", MODE_PRIVATE).edit().putString("current", updateList.toString()).apply();
             } else {
                 //Necessary Update not possible
                 updateStatus("Check Internet connection!");
-                return "";
+                return "exit";
             }
-            return null;
+
+            if(!dataIsValid()){
+                return "not_valid";
+            }
+
+            return "ok";
         }
 
         @Override
         protected void onPostExecute(String s) {
-            if (s == null) {
-                sendToMainActivity();
-            } else {
-                new Handler().postDelayed(SplashActivity.this::finish, SPLASH_DISPLAY_LENGTH);
-            }
             super.onPostExecute(s);
+            switch (s) {
+                case "ok":
+                    sendToMainActivity();
+                    break;
+                case "exit":
+                    new Handler().postDelayed(SplashActivity.this::finish, SPLASH_DISPLAY_LENGTH);
+                    break;
+                case "not_valid":
+                    showDataNotValidDialog();
+                    break;
+            }
         }
 
         private void sendToMainActivity() {
@@ -156,7 +148,7 @@ public class SplashActivity extends AppCompatActivity {
 
         private JSONArray getPackageUpdateList() {
             String currentPackagesString = getSharedPreferences("packages", MODE_PRIVATE).getString("current", "[{name='Base Data', id=0, version=1, installed=False, wanted=True}, {name='Players Handbook', id=1, version=1, installed=False, wanted=True}]");
-            //String currentPackagesString = "[{name='Base Data', id=0, version=1, installed=False, wanted=True}, {name='Players Handbook', id=1, version=1, installed=False, wanted=True}]"
+            //String currentPackagesString = "[{name='Base Data', id=0, version=1, installed=False, wanted=True}, {name='Players Handbook', id=1, version=1, installed=False, wanted=True}]";
             try {
                 File packagesFile = new File(getFileStreamPath("download").getPath() + "/packages.json");
                 Scanner scanner = new Scanner(packagesFile);
@@ -189,6 +181,7 @@ public class SplashActivity extends AppCompatActivity {
                                 }
                             }
                             allPackages.getJSONObject(i).put("wanted", current.getBoolean("wanted"));
+                            allPackages.getJSONObject(i).put("installed", current.getBoolean("installed"));
                         }
                     }
                 }
@@ -234,6 +227,7 @@ public class SplashActivity extends AppCompatActivity {
         public void unzip(String zipFilePath, String destDirectory) throws IOException {
             File destDir = new File(destDirectory);
             if (!destDir.exists()) {
+                //noinspection ResultOfMethodCallIgnored
                 destDir.mkdir();
             }
             ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
@@ -244,6 +238,7 @@ public class SplashActivity extends AppCompatActivity {
                     extractFile(zipIn, filePath);
                 } else {
                     File dir = new File(filePath);
+                    //noinspection ResultOfMethodCallIgnored
                     dir.mkdir();
                 }
                 zipIn.closeEntry();
@@ -255,7 +250,7 @@ public class SplashActivity extends AppCompatActivity {
         private void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
             byte[] bytesIn = new byte[4096];
-            int read = 0;
+            int read;
             while ((read = zipIn.read(bytesIn)) != -1) {
                 bos.write(bytesIn, 0, read);
             }
@@ -316,21 +311,13 @@ public class SplashActivity extends AppCompatActivity {
 
         private void removePackage(JSONObject pack) throws JSONException {
             BasicSQLiteHelper data = new BasicSQLiteHelper(SplashActivity.this, "data.db");
-            data.query(new SQLRequest("SELECT path FROM files WHERE sourceId=" + pack.getString("id") + ";", new SQLRequest.OnQueryResult() {
-                @Override
-                public void onMySQLQueryResult(ResultSet resultSet) {
-
-                }
-
-                @Override
-                public void onSQLiteQueryResult(Cursor cursor) {
-                    if(cursor != null){
-                        cursor.moveToFirst();
-                        do{
-                            //noinspection ResultOfMethodCallIgnored
-                            new File(getFileStreamPath(""), cursor.getString(0)).delete();
-                        } while (cursor.moveToNext());
-                    }
+            data.query(new SQLRequest("SELECT path FROM files WHERE sourceId=" + pack.getString("id") + ";", cursor -> {
+                if(cursor != null){
+                    cursor.moveToFirst();
+                    do{
+                        //noinspection ResultOfMethodCallIgnored
+                        new File(getFileStreamPath(""), cursor.getString(0)).delete();
+                    } while (cursor.moveToNext());
                 }
             }), true);
 
@@ -363,30 +350,93 @@ public class SplashActivity extends AppCompatActivity {
             BasicSQLiteHelper pack = new BasicSQLiteHelper(SplashActivity.this, db);
 
             for (String table : TABLES) {
-                SQLRequest read = new SQLRequest("SELECT * FROM " + table, new SQLRequest.OnQueryResult() {
-                    @Override
-                    public void onMySQLQueryResult(ResultSet resultSet) {
-
-                    }
-
-                    @Override
-                    public void onSQLiteQueryResult(Cursor cursor) {
-                        if(cursor != null) {
-                            cursor.moveToFirst();
-                            do {
-                                int columns = cursor.getColumnCount();
-                                StringBuilder dataString = new StringBuilder();
-                                for (int i = 0; i < columns; i++) {
-                                    if (dataString.length() != 0) dataString.append(", ");
-                                    dataString.append('"').append(cursor.getString(i)).append('"');
-                                }
-                                data.query(new SQLRequest("INSERT INTO " + table + " VALUES (" + dataString.toString() + ");"), true);
-                            } while (cursor.moveToNext());
-                        }
+                SQLRequest read = new SQLRequest("SELECT * FROM " + table, cursor -> {
+                    if(cursor != null) {
+                        cursor.moveToFirst();
+                        do {
+                            int columns = cursor.getColumnCount();
+                            StringBuilder dataString = new StringBuilder();
+                            for (int i = 0; i < columns; i++) {
+                                if (dataString.length() != 0) dataString.append(", ");
+                                dataString.append('"').append(cursor.getString(i)).append('"');
+                            }
+                            data.query(new SQLRequest("INSERT INTO " + table + " VALUES (" + dataString.toString() + ");"), true);
+                        } while (cursor.moveToNext());
                     }
                 });
                 pack.query(read, true);
             }
+        }
+
+        private boolean dataIsValid(){
+            updateStatus("Validating Data");
+
+            File dbFile = getDatabasePath("data.db");
+            if(!dbFile.exists() || !dbFile.isFile()) return false;
+
+            AtomicInteger missingFiles = new AtomicInteger();
+            BasicSQLiteHelper db = new BasicSQLiteHelper(SplashActivity.this, "data.db");
+            SQLRequest files = new SQLRequest("SELECT path FROM files;", cursor -> {
+                cursor.moveToFirst();
+                do {
+                    File file = new File(getFileStreamPath(""), cursor.getString(0));
+                    if (!file.exists() || !file.isFile()) {
+                        missingFiles.getAndIncrement();
+                    }
+                } while (cursor.moveToNext());
+            });
+            db.query(files, true);
+
+            return missingFiles.get() <= 0;
+        }
+
+        private void deleteAllData() {
+            //TODO: Delete all Data
+            File[] files = getFileStreamPath("").listFiles();
+            File[] databases = getDatabasePath("data.db").getParentFile().listFiles();
+
+            if(files != null) {
+                for (File file : files) {
+                    if(file.isFile()){
+                        //noinspection ResultOfMethodCallIgnored
+                        file.delete();
+                    }else{
+                        deleteDirectory(file);
+                    }
+                }
+            }
+
+            if(databases != null) {
+                for (File file : databases) {
+                    if(file.isFile()){
+                        //noinspection ResultOfMethodCallIgnored
+                        file.delete();
+                    }else{
+                        deleteDirectory(file);
+                    }
+                }
+            }
+
+            try {
+                JSONArray packages = new JSONArray(getSharedPreferences("packages", MODE_PRIVATE).getString("current","[]"));
+                for(int i = 0; i < packages.length(); i++){
+                    packages.getJSONObject(i).put("installed", false);
+                }
+                getSharedPreferences("packages", MODE_PRIVATE).edit().putString("current", packages.toString()).apply();
+            } catch (JSONException e) {
+                Log.d(SplashActivity.this.getClass().getSimpleName(), "deleteAlData()", e);
+            }
+        }
+
+        private void deleteDirectory(File directoryToBeDeleted) {
+            File[] allContents = directoryToBeDeleted.listFiles();
+            if (allContents != null) {
+                for (File file : allContents) {
+                    deleteDirectory(file);
+                }
+            }
+            //noinspection ResultOfMethodCallIgnored
+            directoryToBeDeleted.delete();
         }
     }
 }

@@ -29,7 +29,6 @@ public class SQLRequest {
     }
 
     public interface OnQueryResult{
-        void onMySQLQueryResult(ResultSet resultSet);
         void onSQLiteQueryResult(Cursor cursor);
     }
 }

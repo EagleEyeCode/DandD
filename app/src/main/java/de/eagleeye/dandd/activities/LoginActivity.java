@@ -1,8 +1,6 @@
 package de.eagleeye.dandd.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,9 +14,8 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import de.eagleeye.dandd.R;
-import de.eagleeye.dandd.sql.MySQLConnection;
 
-public class LoginActivity extends AppCompatActivity implements MySQLConnection.OnStateChangedListener {
+public class LoginActivity extends AppCompatActivity {
     public static final int ONLINE = 100;
     public static final int OFFLINE = 101;
 
@@ -100,25 +97,5 @@ public class LoginActivity extends AppCompatActivity implements MySQLConnection.
     @Override
     public void onBackPressed() {
         Snackbar.make(findViewById(R.id.login_bottom_controls), "Please Log in or use Offline Data!", BaseTransientBottomBar.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void OnStateChanged(int state) {
-        switch(state){
-            case MySQLConnection.NOT_CONNECTED:
-                Snackbar.make(findViewById(R.id.login_bottom_controls), "Connection Failed", BaseTransientBottomBar.LENGTH_LONG).show();
-                login.setEnabled(true);
-                break;
-            case MySQLConnection.CONNECTING:
-                Snackbar.make(findViewById(R.id.login_bottom_controls), "Connecting", BaseTransientBottomBar.LENGTH_LONG).show();
-                login.setEnabled(false);
-                break;
-            case MySQLConnection.CONNECTED:
-//                connection.saveSQLConnection();
-                getPreferences(MODE_PRIVATE).edit().putString("login_ip", ip.getText().toString()).putString("login_user", user.getText().toString()).apply();
-                setResult(ONLINE);
-                finish();
-                break;
-        }
     }
 }

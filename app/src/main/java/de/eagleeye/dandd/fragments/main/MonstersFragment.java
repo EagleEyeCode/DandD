@@ -29,9 +29,6 @@ public class MonstersFragment extends BaseSQLFragment {
     }
 
     @Override
-    public void onMySQLQueryResult(ResultSet resultSet) { }
-
-    @Override
     public void onSQLiteQueryResult(Cursor cursor) {
 
     }

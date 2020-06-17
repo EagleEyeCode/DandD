@@ -31,9 +31,6 @@ public class ItemsFragment extends BaseSQLFragment {
     }
 
     @Override
-    public void onMySQLQueryResult(ResultSet resultSet) { }
-
-    @Override
     public void onSQLiteQueryResult(Cursor cursor) {
         if(cursor == null){
             setItems(new ArrayList<>());
