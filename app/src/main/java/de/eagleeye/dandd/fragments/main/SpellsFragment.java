@@ -27,7 +27,7 @@ public class SpellsFragment extends BaseSQLFragment {
 
     @Override
     protected String onQuery() {
-        return "SELECT spells.name, spellSchools.name, files.path, IFNULL(spells.level, 0) FROM spells LEFT JOIN spellSchools ON spells.schoolId = spellSchools.id LEFT JOIN files ON spellSchools.imageId = files.id ";
+        return "SELECT spells.name, spellSchools.name, files.path, IFNULL(spells.level, 0) FROM spells LEFT JOIN spellSchools ON spells.schoolId = spellSchools.id AND spells.schoolSourceID=spellSchools.sourceId LEFT JOIN files ON spellSchools.imageId = files.id AND spellSchools.imageSourceId=files.sourceId ";
     }
 
     @Override

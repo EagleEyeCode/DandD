@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements OnFilterInputFini
         setSupportActionBar(toolbar);
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_rules, R.id.nav_handbook, R.id.nav_items, R.id.nav_spells, R.id.nav_monsters)
+                R.id.nav_sources, R.id.nav_rules, R.id.nav_handbook, R.id.nav_items, R.id.nav_spells, R.id.nav_monsters)
                 .setDrawerLayout(drawer)
                 .build();
 

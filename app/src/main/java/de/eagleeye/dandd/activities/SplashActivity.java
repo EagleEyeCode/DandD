@@ -132,6 +132,7 @@ public class SplashActivity extends AppCompatActivity {
             new Handler().postDelayed(() -> {
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }, SPLASH_DISPLAY_LENGTH);
         }
 
@@ -391,7 +392,6 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         private void deleteAllData() {
-            //TODO: Delete all Data
             File[] files = getFileStreamPath("").listFiles();
             File[] databases = getDatabasePath("data.db").getParentFile().listFiles();
 

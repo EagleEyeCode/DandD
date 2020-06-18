@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation"
-    app:startDestination="@id/nav_rules">
+    app:startDestination="@id/nav_sources">
 
     <fragment
         android:id="@+id/nav_handbook"
@@ -32,4 +32,8 @@
         android:id="@+id/nav_spells_filter"
         android:name="de.eagleeye.dandd.fragments.filter.spells.FilterSpellsFragment"
         android:label="@string/spells_filter" />
+    <fragment
+        android:id="@+id/nav_sources"
+        android:name="de.eagleeye.dandd.fragments.main.SourcesFragment"
+        android:label="@string/sources" />
 </navigation>

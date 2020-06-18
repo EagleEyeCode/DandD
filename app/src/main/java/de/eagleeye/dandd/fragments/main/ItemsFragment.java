@@ -27,7 +27,7 @@ public class ItemsFragment extends BaseSQLFragment {
 
     @Override
     protected String onQuery() {
-        return "SELECT items.name, itemTypes.name, files.path FROM items LEFT JOIN itemTypes ON items.type = itemTypes.id LEFT JOIN files ON itemTypes.imageId = files.id ";
+        return "SELECT items.name, itemTypes.name, files.path FROM items LEFT JOIN itemTypes ON items.type = itemTypes.id AND items.typeSourceID=itemTypes.sourceId LEFT JOIN files ON itemTypes.imageId = files.id AND itemTypes.imageSourceId=files.sourceId ";
     }
 
     @Override

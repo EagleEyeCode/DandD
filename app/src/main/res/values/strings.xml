@@ -80,4 +80,8 @@
     <string name="unit">Unit</string>
     <string name="operation">Operation</string>
     <string name="range_value">Range Value</string>
+    <string name="sources">Sources</string>
+    <string name="installed">Installed</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 </resources>

@@ -71,7 +71,7 @@ public class FilterSpellsTypesPart extends BaseFilterPartFragment {
                 if (!middleClass.isEmpty()) middleClass = middleClass + ", ";
                 middleClass = middleClass + i;
             }
-            classPart = " spells.id IN (SELECT spellId FROM spellsClasses WHERE classId IN (" + middleClass + ")) ";
+            classPart = " spells.id IN (SELECT spellId FROM spellsClasses WHERE classId IN (" + middleClass + ")) AND spells.sourceId IN (SELECT spellSourceId FROM spellsClasses WHERE classId IN (" + middleClass + ")) ";
         }else{
             classPart = "";
         }
