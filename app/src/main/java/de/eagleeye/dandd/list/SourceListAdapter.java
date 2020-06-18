@@ -51,11 +51,9 @@ public class SourceListAdapter extends RecyclerView.Adapter<SourceListAdapter.Vi
         holder.name.setText(items.get(position).getName());
         holder.image.setImageBitmap(BitmapFactory.decodeFile(activity.getFileStreamPath("").getPath() + "/" + items.get(position).getImage()));
         if(items.get(position).isInstalled()){
-            holder.installed.setVisibility(View.VISIBLE);
-            holder.download.setVisibility(View.GONE);
+            holder.download_status.setImageResource(R.mipmap.installed);
         }else{
-            holder.installed.setVisibility(View.GONE);
-            holder.download.setVisibility(View.VISIBLE);
+            holder.download_status.setImageResource(R.mipmap.download);
         }
 
         holder.itemView.setOnClickListener(view -> {
@@ -132,16 +130,14 @@ public class SourceListAdapter extends RecyclerView.Adapter<SourceListAdapter.Vi
         View view;
         ImageView image;
         TextView name;
-        TextView installed;
-        ImageView download;
+        ImageView download_status;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             view = itemView;
             image = view.findViewById(R.id.list_source_image);
             name = view.findViewById(R.id.list_source_name);
-            installed = view.findViewById(R.id.list_source_installed);
-            download = view.findViewById(R.id.list_source_download);
+            download_status = view.findViewById(R.id.list_source_download_status);
         }
     }
 
@@ -168,9 +164,9 @@ public class SourceListAdapter extends RecyclerView.Adapter<SourceListAdapter.Vi
                 try {
                     JSONObject pack = packages.getJSONObject(i);
                     int id = pack.getInt("id");
-                    if(id != 0) {
+                    if(id != 0 && id != 2) {
                         AtomicReference<String> imagePath = new AtomicReference<>();
-                        SQLRequest imagePathRequest = new SQLRequest("SELECT path FROM files JOIN sources ON files.id=sources.imageId AND files.sourceId=sources.imageSourceId WHERE sources.id=" + id + " AND sources.imageId NOT NULL;", cursor -> {
+                        SQLRequest imagePathRequest = new SQLRequest("SELECT path FROM sourceCover JOIN files ON sourceCover.imageId=files.id AND sourceCover.imageSourceId=files.sourceId WHERE sourceCover.id=" + id + " AND sourceCover.imageId NOT NULL;", cursor -> {
                             if(cursor != null && cursor.getCount() != 0) {
                                 cursor.moveToFirst();
                                 imagePath.set(cursor.getString(0));
@@ -182,7 +178,7 @@ public class SourceListAdapter extends RecyclerView.Adapter<SourceListAdapter.Vi
                         newList.add(new SourceListItem(pack.getString("name"), pack.getInt("id"), imagePath.get(), pack.getBoolean("installed"), pack.getBoolean("wanted")));
                     }
                 } catch (JSONException e) {
-                    Log.d(getClass().getSimpleName(), "doInBackground()", e);
+                    Log.e(getClass().getSimpleName(), "doInBackground()", e);
                 }
             }
             return null;

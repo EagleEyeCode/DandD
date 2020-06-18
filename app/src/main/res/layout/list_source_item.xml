@@ -26,22 +26,14 @@
             android:layout_below="@+id/list_source_name"
             android:layout_centerHorizontal="true" />
 
-        <TextView
-            android:id="@+id/list_source_installed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/list_source_name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            android:textAlignment="center"
-            android:text="@string/installed"/>
-
         <ImageView
-            android:id="@+id/list_source_download"
+            android:id="@+id/list_source_download_status"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/baseline_get_app_black_48dp"/>
+            android:src="@mipmap/download"
+            android:scaleType="fitCenter"/>
 
     </RelativeLayout>
 

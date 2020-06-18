@@ -1,6 +1,7 @@
 package de.eagleeye.dandd.list;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import de.eagleeye.dandd.R;
@@ -25,12 +27,14 @@ public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.View
     private String search;
     private ArrayList<BasicListItem> items;
     private ArrayList<BasicListItem> searchedItems;
+    private ArrayList<BasicListAdapter.OnClick> listeners;
 
     public BasicListAdapter(Activity activity, ArrayList<BasicListItem> items){
         this.activity = activity;
         this.search = "";
         this.items = items;
         searchedItems = new ArrayList<>();
+        listeners = new ArrayList<>();
         applySearch();
     }
 
@@ -52,7 +56,19 @@ public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.View
         String imagePath = activity.getFileStreamPath("").getAbsolutePath() + "/" + searchedItems.get(position).getImage();
         holder.title.setText(searchedItems.get(position).getTitle());
         holder.subTitle.setText(searchedItems.get(position).getSubTitle());
-        holder.image.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+        if(new File(imagePath).exists() && new File(imagePath).isFile()){
+            holder.image.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+        }else{
+            ViewGroup.LayoutParams params = holder.image.getLayoutParams();
+            params.width = 0;
+            holder.image.setLayoutParams(params);
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            for(OnClick listener : listeners){
+                listener.onClick(searchedItems.get(position));
+            }
+        });
     }
 
     @Override
@@ -87,6 +103,18 @@ public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.View
     public boolean hasNoItems() {
         if(items == null) return true;
         return items.isEmpty();
+    }
+
+    public void addListener(OnClick listener){
+        this.listeners.add(listener);
+    }
+
+    public void removeListener(OnClick listener){
+        this.listeners.remove(listener);
+    }
+
+    public interface OnClick{
+        void onClick(BasicListItem item);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

@@ -37,7 +37,7 @@ import de.eagleeye.dandd.sql.SQLRequest;
 
 public class SplashActivity extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 1000;
-    private final String[] TABLES = new String[]{"abilities", "actions", "alignments", "attacks", "classes", "fileTypes", "files", "itemTypes", "items", "languages", "monsterAbilities", "monsterAction", "monsterArmors", "monsterLanguages", "monsterTypes", "monsters", "savingThrows", "sources", "spellSchools", "spells", "spellsClasses", "traits"};
+    private final String[] TABLES = new String[]{"abilities", "actions", "alignments", "attacks", "classes", "fileTypes", "files", "itemTypes", "items", "languages", "monsterAbilities", "monsterAction", "monsterArmors", "monsterLanguages", "monsterTypes", "monsters", "savingThrows", "sourceCover", "sources", "spellSchools", "spells", "spellsClasses", "traits"};
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -148,7 +148,7 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         private JSONArray getPackageUpdateList() {
-            String currentPackagesString = getSharedPreferences("packages", MODE_PRIVATE).getString("current", "[{name='Base Data', id=0, version=1, installed=False, wanted=True}, {name='Players Handbook', id=1, version=1, installed=False, wanted=True}]");
+            String currentPackagesString = getSharedPreferences("packages", MODE_PRIVATE).getString("current", "[{name='Base Data', id=0, version=1, installed=False, wanted=True}, {name='Covers', id=2, version=1, installed=False, wanted=True}]");
             //String currentPackagesString = "[{name='Base Data', id=0, version=1, installed=False, wanted=True}, {name='Players Handbook', id=1, version=1, installed=False, wanted=True}]";
             try {
                 File packagesFile = new File(getFileStreamPath("download").getPath() + "/packages.json");
@@ -165,9 +165,11 @@ public class SplashActivity extends AppCompatActivity {
                     allPackages.getJSONObject(i).put("action", "none");
                     int id = allPackages.getJSONObject(i).getInt("id");
                     int version = allPackages.getJSONObject(i).getInt("version");
+                    boolean inCurrent = false;
                     for (int j = 0; j < currentPackages.length(); j++) {
                         JSONObject current = currentPackages.getJSONObject(j);
                         if (current.getInt("id") == id) {
+                            inCurrent = true;
                             if (current.getBoolean("wanted")) {
                                 if (current.getBoolean("installed")) {
                                     if (version > current.getInt("version")) {
@@ -184,6 +186,10 @@ public class SplashActivity extends AppCompatActivity {
                             allPackages.getJSONObject(i).put("wanted", current.getBoolean("wanted"));
                             allPackages.getJSONObject(i).put("installed", current.getBoolean("installed"));
                         }
+                    }
+                    if(!inCurrent){
+                        allPackages.getJSONObject(i).put("wanted", false);
+                        allPackages.getJSONObject(i).put("installed", false);
                     }
                 }
                 return allPackages;
