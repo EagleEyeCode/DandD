@@ -5,12 +5,8 @@
         android:title="@string/sources"/>
 
     <item
-        android:id="@+id/nav_rules"
-        android:title="@string/basic_rules"/>
-
-    <item
-        android:id="@+id/nav_handbook"
-        android:title="@string/players_handbook" />
+        android:id="@+id/nav_books"
+        android:title="@string/books"/>
 
     <item
         android:id="@+id/nav_items"

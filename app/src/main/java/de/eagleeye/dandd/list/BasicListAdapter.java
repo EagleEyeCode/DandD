@@ -92,11 +92,10 @@ public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.View
             for(BasicListItem item : items){
                 if(item.getTitle().toLowerCase().startsWith(search.toLowerCase())) searchedItems.add(item);
             }
-            notifyDataSetChanged();
         }else{
             searchedItems = items;
-            notifyDataSetChanged();
         }
+        notifyDataSetChanged();
         if(activity instanceof OnFilterInputFinished) ((OnFilterInputFinished) activity).showSnackbar(searchedItems.size());
     }
 

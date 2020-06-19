@@ -5,14 +5,6 @@
     app:startDestination="@id/nav_sources">
 
     <fragment
-        android:id="@+id/nav_handbook"
-        android:name="de.eagleeye.dandd.fragments.main.HandbookFragment"
-        android:label="@string/players_handbook" />
-    <fragment
-        android:id="@+id/nav_rules"
-        android:name="de.eagleeye.dandd.fragments.main.RulesFragment"
-        android:label="@string/basic_rules" />
-    <fragment
         android:id="@+id/nav_items"
         android:name="de.eagleeye.dandd.fragments.main.ItemsFragment"
         android:label="@string/items" />
@@ -36,4 +28,12 @@
         android:id="@+id/nav_sources"
         android:name="de.eagleeye.dandd.fragments.main.SourcesFragment"
         android:label="@string/sources" />
+    <fragment
+        android:id="@+id/nav_books"
+        android:name="de.eagleeye.dandd.fragments.main.BooksFragment"
+        android:label="@string/books" />
+    <fragment
+        android:id="@+id/nav_pdf"
+        android:name="de.eagleeye.dandd.fragments.main.PdfFragment"
+        android:label="" />
 </navigation>

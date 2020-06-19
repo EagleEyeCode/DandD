@@ -33,9 +33,10 @@ import de.eagleeye.dandd.fragments.OnFilterInputFinished;
 import de.eagleeye.dandd.fragments.OnFilterUpdate;
 
 public class MainActivity extends AppCompatActivity implements OnFilterInputFinished {
-    private static final ArrayList<Integer> pdfFragments = new ArrayList<>(Arrays.asList(R.id.nav_rules, R.id.nav_handbook));
+    private static final ArrayList<Integer> mainFragments = new ArrayList<>(Arrays.asList(R.id.nav_sources, R.id.nav_books, R.id.nav_items, R.id.nav_spells, R.id.nav_monsters));
+    private static final ArrayList<Integer> pdfFragments = new ArrayList<>(Arrays.asList(R.id.nav_books, R.id.nav_pdf));
     private static final ArrayList<Integer> sqlFragments = new ArrayList<>(Arrays.asList(R.id.nav_items, R.id.nav_spells, R.id.nav_monsters));
-    private static final ArrayList<Integer> filterFragments= new ArrayList<>(Arrays.asList(R.id.nav_items_filter, R.id.nav_spells_filter));
+    private static final ArrayList<Integer> filterFragments = new ArrayList<>(Arrays.asList(R.id.nav_items_filter, R.id.nav_spells_filter));
 
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnFilterInputFini
         setSupportActionBar(toolbar);
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_sources, R.id.nav_rules, R.id.nav_handbook, R.id.nav_items, R.id.nav_spells, R.id.nav_monsters)
+                R.id.nav_sources, R.id.nav_books, R.id.nav_items, R.id.nav_spells, R.id.nav_monsters)
                 .setDrawerLayout(drawer)
                 .build();
 
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements OnFilterInputFini
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if(!filterFragments.contains(currentFragmentId)) {
+                if(mainFragments.contains(currentFragmentId)) {
                     if (drawer.isDrawerOpen(drawer.getForegroundGravity())) {
                         drawer.closeDrawer(Gravity.LEFT);
                     } else {
@@ -140,13 +141,12 @@ public class MainActivity extends AppCompatActivity implements OnFilterInputFini
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_main_content);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 
     @Override
     public void onBackPressed() {
-        if(pdfFragments.contains(currentFragmentId) || sqlFragments.contains(currentFragmentId)){
+        if(mainFragments.contains(currentFragmentId)){
             finish();
         }else {
             super.onBackPressed();
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements OnFilterInputFini
 
     @Override
     protected void onResume() {
-        if(pdfFragments.contains(currentFragmentId) || sqlFragments.contains(currentFragmentId)) navController.navigate(getPreferences(MODE_PRIVATE).getInt("last_main_fragment", R.id.nav_rules));
+        if(pdfFragments.contains(currentFragmentId) || sqlFragments.contains(currentFragmentId)) navController.navigate(getPreferences(MODE_PRIVATE).getInt("last_main_fragment", R.id.nav_sources));
         if(lastTimeMillis != 0){
             if(System.currentTimeMillis() - lastTimeMillis >= 1800000){
                 sendToSplashScreen();

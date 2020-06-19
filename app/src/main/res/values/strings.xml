@@ -84,4 +84,6 @@
     <string name="installed">Installed</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="books">Books</string>
+    <string name="pdf_fragment">PDF Fragment</string>
 </resources>

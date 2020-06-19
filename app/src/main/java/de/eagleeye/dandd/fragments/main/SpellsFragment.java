@@ -27,7 +27,7 @@ public class SpellsFragment extends BaseSQLFragment {
 
     @Override
     protected String onQuery() {
-        return "SELECT spells.name, spellSchools.name, files.path, IFNULL(spells.level, 0) FROM spells LEFT JOIN spellSchools ON spells.schoolId = spellSchools.id AND spells.schoolSourceID=spellSchools.sourceId LEFT JOIN files ON spellSchools.imageId = files.id AND spellSchools.imageSourceId=files.sourceId ";
+        return "SELECT spells.id, spells.sourceId, spells.name, spellSchools.name, files.path, IFNULL(spells.level, '0') FROM spells LEFT JOIN spellSchools ON spells.schoolId = spellSchools.id AND spells.schoolSourceID=spellSchools.sourceId LEFT JOIN files ON spellSchools.imageId = files.id AND spellSchools.imageSourceId=files.sourceId ";
     }
 
     @Override
@@ -39,9 +39,14 @@ public class SpellsFragment extends BaseSQLFragment {
         if (cursor.moveToFirst()) {
             ArrayList<BasicListItem> items = new ArrayList<>();
             do {
-                items.add(new BasicListItem(0, cursor.getString(0), "Level " + cursor.getString(3) + " " + cursor.getString(1) + " Spell", cursor.getString(2)));
+                items.add(new BasicListItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), "Level " + cursor.getString(5) + " " + cursor.getString(3) + " Spell", cursor.getString(4)));
             } while (cursor.moveToNext());
             setItems(items);
         }
+    }
+
+    @Override
+    public void onClick(BasicListItem item) {
+
     }
 }

@@ -27,7 +27,7 @@ public class ItemsFragment extends BaseSQLFragment {
 
     @Override
     protected String onQuery() {
-        return "SELECT items.name, itemTypes.name, files.path FROM items LEFT JOIN itemTypes ON items.type = itemTypes.id AND items.typeSourceID=itemTypes.sourceId LEFT JOIN files ON itemTypes.imageId = files.id AND itemTypes.imageSourceId=files.sourceId ";
+        return "SELECT items.id, items.sourceId, items.name, itemTypes.name, files.path FROM items LEFT JOIN itemTypes ON items.type = itemTypes.id AND items.typeSourceID=itemTypes.sourceId LEFT JOIN files ON itemTypes.imageId = files.id AND itemTypes.imageSourceId=files.sourceId ";
     }
 
     @Override
@@ -39,9 +39,14 @@ public class ItemsFragment extends BaseSQLFragment {
         if (cursor.moveToFirst()) {
             ArrayList<BasicListItem> items = new ArrayList<>();
             do {
-                items.add(new BasicListItem(0, cursor.getString(0), cursor.getString(1), cursor.getString(2)));
+                items.add(new BasicListItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getString(3), cursor.getString(4)));
             } while (cursor.moveToNext());
             setItems(items);
         }
+    }
+
+    @Override
+    public void onClick(BasicListItem item) {
+
     }
 }

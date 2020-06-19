@@ -24,7 +24,7 @@ import de.eagleeye.dandd.list.BasicListItem;
 import de.eagleeye.dandd.sql.BasicSQLiteHelper;
 import de.eagleeye.dandd.sql.SQLRequest;
 
-public abstract class BaseSQLFragment extends Fragment implements SQLRequest.OnQueryResult {
+public abstract class BaseSQLFragment extends Fragment implements SQLRequest.OnQueryResult, BasicListAdapter.OnClick {
     private RecyclerView list;
     private BasicListAdapter adapter;
     private EditText search;
@@ -46,6 +46,7 @@ public abstract class BaseSQLFragment extends Fragment implements SQLRequest.OnQ
 
         list = rootView.findViewById(onRecyclerViewID());
         adapter = new BasicListAdapter(getActivity(), items);
+        adapter.addListener(this);
 
         search = rootView.findViewById(R.id.et_search);
 
