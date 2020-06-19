@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".fragments.main.PdfFragment">
+    tools:context=".fragments.show.PdfFragment">
 
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/fragment_main_pdf_view"

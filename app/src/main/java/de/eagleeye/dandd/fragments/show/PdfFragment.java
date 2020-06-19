@@ -1,4 +1,4 @@
-package de.eagleeye.dandd.fragments.main;
+package de.eagleeye.dandd.fragments.show;
 
 import android.content.Context;
 import android.os.Bundle;

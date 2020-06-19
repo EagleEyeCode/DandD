@@ -18,7 +18,7 @@
         android:label="@string/spells" />
     <fragment
         android:id="@+id/nav_items_filter"
-        android:name="de.eagleeye.dandd.fragments.filter.items.FilterItemsFragment"
+        android:name="de.eagleeye.dandd.fragments.filter.ItemsFilterFragment"
         android:label="@string/items_filter" />
     <fragment
         android:id="@+id/nav_spells_filter"
@@ -34,6 +34,6 @@
         android:label="@string/books" />
     <fragment
         android:id="@+id/nav_pdf"
-        android:name="de.eagleeye.dandd.fragments.main.PdfFragment"
+        android:name="de.eagleeye.dandd.fragments.show.PdfFragment"
         android:label="" />
 </navigation>

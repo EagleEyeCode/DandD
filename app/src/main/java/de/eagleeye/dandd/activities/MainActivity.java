@@ -213,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements OnFilterInputFini
     }
 
     public String getFilter() {
-        return filter;
+        //TODO: return filter;
+        return "";
     }
 }

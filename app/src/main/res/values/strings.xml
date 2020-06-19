@@ -86,4 +86,5 @@
     <string name="yes">Yes</string>
     <string name="books">Books</string>
     <string name="pdf_fragment">PDF Fragment</string>
+    <string name="advanced">Advanced</string>
 </resources>
