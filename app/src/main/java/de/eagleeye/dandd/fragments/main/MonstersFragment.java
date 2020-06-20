@@ -1,6 +1,10 @@
 package de.eagleeye.dandd.fragments.main;
 
 import android.database.Cursor;
+import android.os.Bundle;
+
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -48,6 +52,12 @@ public class MonstersFragment extends BaseSQLFragment {
 
     @Override
     public void onClick(BasicListItem item) {
-
+        if(getActivity() != null) {
+            NavController navController = Navigation.findNavController(getActivity(), R.id.nav_main_content);
+            Bundle args = new Bundle();
+            args.putInt("id", item.getId());
+            args.putInt("sourceId", item.getSourceId());
+            navController.navigate(R.id.nav_monsters_show, args);
+        }
     }
 }

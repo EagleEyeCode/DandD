@@ -40,4 +40,20 @@
         android:id="@+id/nav_pdf"
         android:name="de.eagleeye.dandd.fragments.show.PdfFragment"
         android:label="" />
+    <fragment
+        android:id="@+id/nav_items_show"
+        android:name="de.eagleeye.dandd.fragments.show.ItemsShowFragment"
+        android:label="ItemsShowFragment" />
+    <fragment
+        android:id="@+id/nav_spells_show"
+        android:name="de.eagleeye.dandd.fragments.show.SpellsShowFragment"
+        android:label="SpellsShowFragment" />
+    <fragment
+        android:id="@+id/nav_monsters_show"
+        android:name="de.eagleeye.dandd.fragments.show.MonstersShowFragment"
+        android:label="MonstersShowFragment" />
+    <fragment
+        android:id="@+id/nav_monsters_model_show"
+        android:name="de.eagleeye.dandd.fragments.show.MonstersModelShowFragment"
+        android:label="MonstersModelShowFragment" />
 </navigation>

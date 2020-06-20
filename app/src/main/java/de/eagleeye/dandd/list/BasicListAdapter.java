@@ -42,7 +42,7 @@ public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View v = inflater.inflate(R.layout.basic_list_item_view, parent, false);
+        View v = inflater.inflate(R.layout.list_basic_item, parent, false);
         return new BasicListAdapter.ViewHolder(v);
     }
 

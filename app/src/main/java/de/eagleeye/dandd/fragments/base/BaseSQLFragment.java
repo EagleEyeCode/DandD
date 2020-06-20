@@ -2,6 +2,7 @@ package de.eagleeye.dandd.fragments.base;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -94,18 +95,24 @@ public abstract class BaseSQLFragment extends Fragment implements SQLRequest.OnQ
     @Override
     public void onResume() {
         super.onResume();
-        String searchText = getActivity().getSharedPreferences(onTabName(), Context.MODE_PRIVATE).getString("search", "");
-        search.setText(searchText);
-        adapter.setSearch(search.getText().toString());
-        request = new SQLRequest(onQuery() + getFilter(), this);
-        sqLiteHelper.query(request);
-        paused = false;
+        new Handler().postDelayed(this::updateList, 20);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         paused = true;
+    }
+
+    public void updateList(){
+        if(getActivity() != null) {
+            String searchText = getActivity().getSharedPreferences(onTabName(), Context.MODE_PRIVATE).getString("search", "");
+            search.setText(searchText);
+            adapter.setSearch(search.getText().toString());
+            request = new SQLRequest(onQuery() + getFilter(), this);
+            sqLiteHelper.query(request);
+            paused = false;
+        }
     }
 
     private String getFilter(){

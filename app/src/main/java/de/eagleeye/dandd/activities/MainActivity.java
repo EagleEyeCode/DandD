@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         snackbarRunnable = () -> snackbar.dismiss();
 
         fab = findViewById(R.id.fab);
-        fab.setOnClickListener(v -> showFilter());
+        fab.setOnClickListener(v -> fabClick());
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.nav_view);
@@ -77,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
                 fab.setVisibility(View.VISIBLE);
             }else{
                 fab.setVisibility(View.GONE);
+            }
+            if(currentFragmentId == R.id.nav_monsters_show){
+                fab.setVisibility(View.VISIBLE);
             }
 
             if(filterFragments.contains(currentFragmentId)){
@@ -167,6 +170,15 @@ public class MainActivity extends AppCompatActivity {
         if(!snackbar.isShown()) snackbar.show();
         snackbarHandler.removeCallbacks(snackbarRunnable);
         if(filteredItemsCount != 0) snackbarHandler.postDelayed(snackbarRunnable, 2000);
+    }
+
+    private void fabClick(){
+        if(mainFragments.contains(currentFragmentId)){
+            showFilter();
+        }else {
+            Bundle args = new Bundle();
+            navController.navigate(R.id.nav_monsters_model_show, args);
+        }
     }
 
     private void showFilter() {

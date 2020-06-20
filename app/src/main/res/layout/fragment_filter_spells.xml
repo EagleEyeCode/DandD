@@ -74,18 +74,6 @@
                         android:layout_height="wrap_content"
                         android:text="@string/level"/>
 
-                    <RadioButton
-                        android:id="@+id/sort_type_spells_range"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/range"/>
-
-                    <RadioButton
-                        android:id="@+id/sort_type_spells_duration"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/duration"/>
-
                 </RadioGroup>
 
                 <RadioGroup

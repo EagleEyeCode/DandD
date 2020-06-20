@@ -127,7 +127,7 @@
             android:layout_height="wrap_content"
             app:el_expanded="false">
 
-            <RelativeLayout
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/fragment_filter_items_types"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
