@@ -188,9 +188,4 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.this.startActivity(intent);
         MainActivity.this.finish();
     }
-
-    public String getFilter() {
-        //TODO: return filter;
-        return "";
-    }
 }

@@ -88,4 +88,6 @@
     <string name="pdf_fragment">PDF Fragment</string>
     <string name="advanced">Advanced</string>
     <string name="monsters_filter">Monsters - Filter</string>
+    <string name="schools">Schools</string>
+    <string name="classes">Classes</string>
 </resources>

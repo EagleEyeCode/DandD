@@ -109,8 +109,11 @@ public abstract class BaseSQLFragment extends Fragment implements SQLRequest.OnQ
     }
 
     private String getFilter(){
-        if(!(getActivity() instanceof MainActivity)) return "";
-        return ((MainActivity) getActivity()).getFilter();
+        if(getActivity() != null) {
+            return getActivity().getSharedPreferences(onTabName(), Context.MODE_PRIVATE).getString("filter", "");
+        }else {
+            return "";
+        }
     }
 
     protected void setItems(ArrayList<BasicListItem> itemList){
