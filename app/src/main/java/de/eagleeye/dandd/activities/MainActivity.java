@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -29,14 +28,12 @@ import java.util.Arrays;
 
 import de.eagleeye.dandd.R;
 import de.eagleeye.dandd.fragments.base.BaseFilterFragment;
-import de.eagleeye.dandd.fragments.OnFilterInputFinished;
-import de.eagleeye.dandd.fragments.OnFilterUpdate;
 
-public class MainActivity extends AppCompatActivity implements OnFilterInputFinished {
+public class MainActivity extends AppCompatActivity {
     private static final ArrayList<Integer> mainFragments = new ArrayList<>(Arrays.asList(R.id.nav_sources, R.id.nav_books, R.id.nav_items, R.id.nav_spells, R.id.nav_monsters));
     private static final ArrayList<Integer> pdfFragments = new ArrayList<>(Arrays.asList(R.id.nav_books, R.id.nav_pdf));
     private static final ArrayList<Integer> sqlFragments = new ArrayList<>(Arrays.asList(R.id.nav_items, R.id.nav_spells, R.id.nav_monsters));
-    private static final ArrayList<Integer> filterFragments = new ArrayList<>(Arrays.asList(R.id.nav_items_filter, R.id.nav_spells_filter));
+    private static final ArrayList<Integer> filterFragments = new ArrayList<>(Arrays.asList(R.id.nav_items_filter, R.id.nav_spells_filter, R.id.nav_monsters_filter));
 
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
@@ -44,9 +41,7 @@ public class MainActivity extends AppCompatActivity implements OnFilterInputFini
     private Snackbar snackbar;
 
     private NavController navController;
-    private OnFilterUpdate onFilterUpdate;
     private int currentFragmentId;
-    private String filter;
     private long lastTimeMillis;
     private int fragmentSwitches;
 
@@ -57,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements OnFilterInputFini
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        filter = "";
         fragmentSwitches = 0;
 
         snackbarHandler = new Handler();
@@ -81,10 +75,8 @@ public class MainActivity extends AppCompatActivity implements OnFilterInputFini
             currentFragmentId = destination.getId();
             if(sqlFragments.contains(currentFragmentId)){
                 fab.setVisibility(View.VISIBLE);
-                filter = getPreferences(MODE_PRIVATE).getString(destination.getId() + "_filter", "");
             }else{
                 fab.setVisibility(View.GONE);
-                filter = "";
             }
 
             if(filterFragments.contains(currentFragmentId)){
@@ -121,10 +113,7 @@ public class MainActivity extends AppCompatActivity implements OnFilterInputFini
                 }
                 return true;
             case R.id.filter_clear:
-                NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_main_content);
-                Fragment fragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
-                if(fragment instanceof BaseFilterFragment) ((BaseFilterFragment) fragment).clear();
-                return true;
+                return false;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -171,14 +160,6 @@ public class MainActivity extends AppCompatActivity implements OnFilterInputFini
         super.onResume();
     }
 
-    @Override
-    public void onFilterInputFinished(String filter) {
-        this.filter = filter;
-        getPreferences(MODE_PRIVATE).edit().putString(currentFragmentId + "_filter", filter).apply();
-        if(onFilterUpdate != null) onFilterUpdate.onFilterUpdate();
-    }
-
-    @Override
     public void showSnackbar(int filteredItemsCount) {
         if(snackbar == null) snackbar = Snackbar.make(fab, "", BaseTransientBottomBar.LENGTH_INDEFINITE);
         if(filteredItemsCount == 1) snackbar.setText(filteredItemsCount + " Result");
@@ -186,10 +167,6 @@ public class MainActivity extends AppCompatActivity implements OnFilterInputFini
         if(!snackbar.isShown()) snackbar.show();
         snackbarHandler.removeCallbacks(snackbarRunnable);
         if(filteredItemsCount != 0) snackbarHandler.postDelayed(snackbarRunnable, 2000);
-    }
-
-    public void setOnFilterUpdate(@NonNull OnFilterUpdate onFilterUpdate){
-        this.onFilterUpdate = onFilterUpdate;
     }
 
     private void showFilter() {
@@ -201,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements OnFilterInputFini
                 navController.navigate(R.id.nav_spells_filter);
                 break;
             case R.id.nav_monsters:
-                //TODO: Monsters filter
+                navController.navigate(R.id.nav_monsters_filter);
                 break;
         }
     }

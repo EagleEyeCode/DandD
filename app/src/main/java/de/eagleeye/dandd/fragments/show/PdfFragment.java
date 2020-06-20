@@ -20,10 +20,8 @@ import java.io.InputStream;
 import java.util.Objects;
 
 import de.eagleeye.dandd.R;
-import de.eagleeye.dandd.activities.MainActivity;
-import de.eagleeye.dandd.fragments.OnFilterUpdate;
 
-public class PdfFragment extends Fragment implements OnFilterUpdate {
+public class PdfFragment extends Fragment {
     private PDFView pdfView;
     private File file;
 
@@ -46,7 +44,6 @@ public class PdfFragment extends Fragment implements OnFilterUpdate {
             if(args.containsKey("path")){
                 file = new File(getActivity().getFileStreamPath(""), Objects.requireNonNull(args.getString("path")));
                 loadFile(file);
-
             }
         }
     }
@@ -55,26 +52,25 @@ public class PdfFragment extends Fragment implements OnFilterUpdate {
     public void onPause() {
         if(getActivity() != null) {
             int page = pdfView.getCurrentPage();
-            getActivity().getSharedPreferences("books", Context.MODE_PRIVATE).edit().putInt(file.getAbsoluteFile() + "PageNo", page).apply();
+            String key = file.getAbsoluteFile() + "PageNo";
+            getActivity().getSharedPreferences("books", Context.MODE_PRIVATE).edit().putInt(key, page).apply();
         }
         super.onPause();
     }
 
-    private String getFilter(){
-        if(!(getActivity() instanceof MainActivity)) return "";
-        return ((MainActivity) getActivity()).getFilter();
-    }
-
-    public void onFilterUpdate(){
-        pdfView.jumpTo(Integer.parseInt(getFilter()), true);
+    public void jumpToLastSeenPage(){
+        if(getActivity() != null) {
+            String key = file.getAbsoluteFile() + "PageNo";
+            int page = getActivity().getSharedPreferences("books", Context.MODE_PRIVATE).getInt(key, 0);
+            pdfView.jumpTo(page, true);
+        }
     }
 
     public void loadFile(File file){
         try {
             if(getActivity() != null) {
                 InputStream is = new FileInputStream(file);
-                int page = getActivity().getSharedPreferences("books", Context.MODE_PRIVATE).getInt(file.getAbsoluteFile() + "PageNo", 0);
-                pdfView.fromStream(is).onRender((nbPages, pageWidth, pageHeight) -> pdfView.fitToWidth(page)).load();
+                pdfView.fromStream(is).onLoad(nbPages -> jumpToLastSeenPage()).load();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

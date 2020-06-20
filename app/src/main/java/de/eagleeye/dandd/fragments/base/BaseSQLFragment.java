@@ -38,6 +38,8 @@ public abstract class BaseSQLFragment extends Fragment implements SQLRequest.OnQ
     protected abstract String onTabName();
     protected abstract String onQuery();
 
+    private boolean paused;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,8 +65,10 @@ public abstract class BaseSQLFragment extends Fragment implements SQLRequest.OnQ
 
             @Override
             public void afterTextChanged(Editable s) {
-                adapter.setSearch(search.getText().toString());
-                getActivity().getPreferences(Context.MODE_PRIVATE).edit().putString(onTabName() + "_search", search.getText().toString()).apply();
+                if(!paused) {
+                    adapter.setSearch(s.toString());
+                    getActivity().getSharedPreferences(onTabName(), Context.MODE_PRIVATE).edit().putString("search", s.toString()).apply();
+                }
             }
         });
 
@@ -84,19 +88,24 @@ public abstract class BaseSQLFragment extends Fragment implements SQLRequest.OnQ
             }
         });
 
-        if(adapter.hasNoItems()) sqLiteHelper.query(request);
-
-        if(getActivity() instanceof MainActivity) ((MainActivity) getActivity()).setOnFilterUpdate(() -> {
-            search.setText(getActivity().getPreferences(Context.MODE_PRIVATE).getString(onTabName() + "_search", ""));
-            adapter.setSearch(search.getText().toString());
-            request = new SQLRequest(onQuery() + getFilter(), this);
-            sqLiteHelper.query(request);
-        });
-
-        search.setText(getActivity().getPreferences(Context.MODE_PRIVATE).getString(onTabName() + "_search", ""));
-        adapter.setSearch(search.getText().toString());
-
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        String searchText = getActivity().getSharedPreferences(onTabName(), Context.MODE_PRIVATE).getString("search", "");
+        search.setText(searchText);
+        adapter.setSearch(search.getText().toString());
+        request = new SQLRequest(onQuery() + getFilter(), this);
+        sqLiteHelper.query(request);
+        paused = false;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        paused = true;
     }
 
     private String getFilter(){

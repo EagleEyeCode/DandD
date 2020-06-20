@@ -22,8 +22,12 @@
         android:label="@string/items_filter" />
     <fragment
         android:id="@+id/nav_spells_filter"
-        android:name="de.eagleeye.dandd.fragments.filter.spells.FilterSpellsFragment"
+        android:name="de.eagleeye.dandd.fragments.filter.SpellsFilterFragment"
         android:label="@string/spells_filter" />
+    <fragment
+        android:id="@+id/nav_monsters_filter"
+        android:name="de.eagleeye.dandd.fragments.filter.MonsterFilterFragment"
+        android:label="@string/monsters_filter" />
     <fragment
         android:id="@+id/nav_sources"
         android:name="de.eagleeye.dandd.fragments.main.SourcesFragment"

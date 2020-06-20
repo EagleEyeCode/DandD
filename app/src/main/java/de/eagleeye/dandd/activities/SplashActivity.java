@@ -2,6 +2,7 @@ package de.eagleeye.dandd.activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
@@ -305,6 +306,10 @@ public class SplashActivity extends AppCompatActivity {
             }
 
             if (unzipped) {
+                getSharedPreferences("books", Context.MODE_PRIVATE).edit().clear().apply();
+                getSharedPreferences("items", Context.MODE_PRIVATE).edit().clear().apply();
+                getSharedPreferences("spells", Context.MODE_PRIVATE).edit().clear().apply();
+                getSharedPreferences("monsters", Context.MODE_PRIVATE).edit().clear().apply();
                 Log.d(SplashActivity.this.getClass().getSimpleName(), "Successfully installed " + pack.getString("name"));
             } else {
                 Log.d(SplashActivity.this.getClass().getSimpleName(), "Failed to install " + pack.getString("name"));

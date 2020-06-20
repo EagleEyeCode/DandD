@@ -1,11 +1,18 @@
 package de.eagleeye.dandd.fragments.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,89 +21,105 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import net.cachapa.expandablelayout.ExpandableLayout;
+
 import java.util.ArrayList;
 
 import de.eagleeye.dandd.activities.MainActivity;
 import de.eagleeye.dandd.R;
 
 public abstract class BaseFilterFragment extends Fragment {
-    private ArrayList<BaseFilterPartFragment> fragments;
-    protected abstract ArrayList<BaseFilterPartFragment> getFragments();
+    private EditText search;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_filter, null);
-
-        fragments = getFragments();
-
-        ViewPager viewPager = root.findViewById(R.id.filter_view_pager);
-        MyViewPagerAdapter adapter = new MyViewPagerAdapter(getActivity().getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
-        viewPager.setAdapter(adapter);
-
-        return root;
+        return inflater.inflate(onLayoutId(), null);
     }
 
     @Override
-    public void onDestroy() {
-        if (getActivity() instanceof MainActivity) ((MainActivity) getActivity()).onFilterInputFinished(generateFilter());
-        super.onDestroy();
-    }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        search = view.findViewById(R.id.et_search);
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-    private String generateFilter(){
-        SharedPreferences prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
-        String where = fragments.get(1).getFilterPart(prefs, getResources());
-        String values = fragments.get(2).getFilterPart(prefs, getResources());
-
-        if(where.isEmpty()){
-            where = values;
-        }else{
-            if(!values.isEmpty()) where = where + " AND " + values;
-        }
-
-        if(where.isEmpty()){
-            return " " + fragments.get(0).getFilterPart(prefs, getResources());
-        }else{
-            return " WHERE " + where + " " + fragments.get(0).getFilterPart(prefs, getResources());
-        }
-    }
-
-    public void clear() {
-        SharedPreferences prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
-        for(BaseFilterPartFragment fragment : fragments){
-            fragment.requestClear(prefs);
-        }
-        getActivity().onBackPressed();
-    }
-
-    private static class MyViewPagerAdapter extends FragmentStatePagerAdapter{
-        private ArrayList<BaseFilterPartFragment> fragments;
-
-        private MyViewPagerAdapter(@NonNull FragmentManager fm, int behavior, @NonNull ArrayList<BaseFilterPartFragment> fragments) {
-            super(fm, behavior);
-            this.fragments = fragments;
-        }
-
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            return fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.size();
-        }
-
-        @Nullable
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch(position){
-                case 0: return "Search";
-                case 1: return "Types";
-                case 2: return "Values";
-                default: return super.getPageTitle(position);
             }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(getActivity() != null) {
+                    getActivity().getSharedPreferences(onTabName(), Context.MODE_PRIVATE).edit().putString("search", s.toString()).apply();
+                }
+            }
+        });
+
+        setHasOptionsMenu(true);
+        load();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.filter_clear) {
+            clear();
+            load();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        save();
+    }
+
+    protected void setupExpandable(RelativeLayout dropLayout, ImageView dropImage, ExpandableLayout dropExpandable){
+        dropLayout.setOnClickListener(v -> {
+            if(dropExpandable.isExpanded()){
+                dropImage.setImageResource(R.drawable.drop_down_foreground);
+                dropExpandable.setExpanded(false, true);
+            }else{
+                dropImage.setImageResource(R.drawable.drop_up_foreground);
+                dropExpandable.setExpanded(true, true);
+            }
+        });
+    }
+
+    protected void closeExpendableIfOpen(ExpandableLayout expandable, ImageView dropImage){
+        if(expandable.isExpanded()) {
+            expandable.setExpanded(false, true);
+            dropImage.setImageResource(R.drawable.drop_down_foreground);
+        }
+    }
+
+    protected void load() {
+        if(getActivity() != null) {
+            String searchText = getActivity().getSharedPreferences(onTabName(), Context.MODE_PRIVATE).getString("search", "");
+            search.setText(searchText);
+        }
+    }
+
+    protected void save() {
+        if(getActivity() != null) {
+            getActivity().getSharedPreferences(onTabName(), Context.MODE_PRIVATE).edit().putString("filter", generateFilter()).apply();
+        }
+    }
+
+    protected void clear() {
+        if(getActivity() != null){
+            getActivity().getSharedPreferences(onTabName(), Context.MODE_PRIVATE).edit().clear().apply();
+        }
+    }
+
+    protected abstract int onLayoutId();
+    protected abstract String onTabName();
+    protected abstract String generateFilter();
 }

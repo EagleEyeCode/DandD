@@ -1,7 +1,6 @@
 package de.eagleeye.dandd.list;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
-
 import java.io.File;
 import java.util.ArrayList;
 
 import de.eagleeye.dandd.R;
-import de.eagleeye.dandd.fragments.OnFilterInputFinished;
+import de.eagleeye.dandd.activities.MainActivity;
 
 public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder>{
     private Activity activity;
@@ -96,7 +91,7 @@ public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.View
             searchedItems = items;
         }
         notifyDataSetChanged();
-        if(activity instanceof OnFilterInputFinished) ((OnFilterInputFinished) activity).showSnackbar(searchedItems.size());
+        if(activity instanceof MainActivity) ((MainActivity) activity).showSnackbar(searchedItems.size());
     }
 
     public boolean hasNoItems() {
