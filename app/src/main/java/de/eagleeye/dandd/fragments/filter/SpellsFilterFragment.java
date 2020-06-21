@@ -236,13 +236,12 @@ public class SpellsFilterFragment extends BaseFilterFragment {
             int mVal = prefs.getInt("filter_spells_level_m", R.id.filter_spells_m_both);
             int ritualVal = prefs.getInt("filter_spells_level_ritual", R.id.filter_spells_ritual_both);
 
-            //TODO: NONE not working
             parts.add("IFNULL(spells.level, 0) " + resources.getStringArray(R.array.filter_operations)[levelOperationVal] + " " + levelVal);
-            if(vVal == R.id.filter_spells_v_none) parts.add("spells.v ISNULL");
+            if(vVal == R.id.filter_spells_v_none) parts.add("spells.v LIKE 'null'");
             if(vVal == R.id.filter_spells_v_only) parts.add("spells.v == 1");
-            if(sVal == R.id.filter_spells_s_none) parts.add("spells.s ISNULL");
+            if(sVal == R.id.filter_spells_s_none) parts.add("spells.s LIKE 'null'");
             if(sVal == R.id.filter_spells_s_only) parts.add("spells.s == 1");
-            if(mVal == R.id.filter_spells_m_none) parts.add("spells.m ISNULL");
+            if(mVal == R.id.filter_spells_m_none) parts.add("spells.m LIKE 'null'");
             if(mVal == R.id.filter_spells_m_only) parts.add("spells.m == 1");
             if(ritualVal == R.id.filter_spells_ritual_none) parts.add("spells.ritual ISNULL");
             if(ritualVal == R.id.filter_spells_ritual_only) parts.add("spells.ritual == 1");

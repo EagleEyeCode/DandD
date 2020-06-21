@@ -172,7 +172,6 @@ public class ItemsFilterFragment extends BaseFilterFragment {
     }
 
     private String getTypeFilterPart(){
-        //TODO: TypeFilterPart
         return "";
     }
 

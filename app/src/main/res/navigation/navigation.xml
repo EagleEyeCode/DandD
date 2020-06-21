@@ -43,17 +43,17 @@
     <fragment
         android:id="@+id/nav_items_show"
         android:name="de.eagleeye.dandd.fragments.show.ItemsShowFragment"
-        android:label="ItemsShowFragment" />
+        android:label="" />
     <fragment
         android:id="@+id/nav_spells_show"
         android:name="de.eagleeye.dandd.fragments.show.SpellsShowFragment"
-        android:label="SpellsShowFragment" />
+        android:label="" />
     <fragment
         android:id="@+id/nav_monsters_show"
         android:name="de.eagleeye.dandd.fragments.show.MonstersShowFragment"
-        android:label="MonstersShowFragment" />
+        android:label="" />
     <fragment
         android:id="@+id/nav_monsters_model_show"
         android:name="de.eagleeye.dandd.fragments.show.MonstersModelShowFragment"
-        android:label="MonstersModelShowFragment" />
+        android:label="" />
 </navigation>

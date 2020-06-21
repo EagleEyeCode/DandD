@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private Handler snackbarHandler;
     private Runnable snackbarRunnable;
 
+    private int[] modelMonsterId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,12 +76,10 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             currentFragmentId = destination.getId();
             if(sqlFragments.contains(currentFragmentId)){
+                fab.setImageResource(R.drawable.baseline_filter_list_black_18dp);
                 fab.setVisibility(View.VISIBLE);
             }else{
                 fab.setVisibility(View.GONE);
-            }
-            if(currentFragmentId == R.id.nav_monsters_show){
-                fab.setVisibility(View.VISIBLE);
             }
 
             if(filterFragments.contains(currentFragmentId)){
@@ -176,8 +176,12 @@ public class MainActivity extends AppCompatActivity {
         if(mainFragments.contains(currentFragmentId)){
             showFilter();
         }else {
-            Bundle args = new Bundle();
-            navController.navigate(R.id.nav_monsters_model_show, args);
+            if(modelMonsterId != null && modelMonsterId.length == 2) {
+                Bundle args = new Bundle();
+                args.putInt("id", modelMonsterId[0]);
+                args.putInt("sourceId", modelMonsterId[1]);
+                navController.navigate(R.id.nav_monsters_model_show, args);
+            }
         }
     }
 
@@ -199,5 +203,15 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, SplashActivity.class);
         MainActivity.this.startActivity(intent);
         MainActivity.this.finish();
+    }
+
+    public void setModelMonsterId(int[] modelMonsterId) {
+        this.modelMonsterId = modelMonsterId;
+        if(modelMonsterId != null) {
+            fab.setImageResource(R.drawable.ar_foreground);
+            fab.setVisibility(View.VISIBLE);
+        }else {
+            fab.setVisibility(View.GONE);
+        }
     }
 }
