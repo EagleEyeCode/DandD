@@ -1,6 +1,7 @@
 package de.eagleeye.dandd.fragments.main;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 
 import androidx.navigation.NavController;
@@ -31,12 +32,12 @@ public class SpellsFragment extends BaseSQLFragment {
 
     @Override
     protected String onQuery() {
-        return "SELECT spells.id, spells.sourceId, spells.name, spellSchools.name, files.path, IFNULL(spells.level, '0') FROM spells LEFT JOIN spellSchools ON spells.schoolId = spellSchools.id AND spells.schoolSourceID=spellSchools.sourceId LEFT JOIN files ON spellSchools.imageId = files.id AND spellSchools.imageSourceId=files.sourceId ";
+        return "SELECT DISTINCT spells.id, spells.sourceId, spells.name, spellSchools.name, files.path, IFNULL(spells.level, '0') FROM spells LEFT JOIN spellSchools ON spells.schoolId = spellSchools.id AND spells.schoolSourceID=spellSchools.sourceId LEFT JOIN files ON spellSchools.imageId = files.id AND spellSchools.imageSourceId=files.sourceId JOIN spellsClasses ON spells.id=spellsClasses.spellId AND spells.sourceId=spellsClasses.spellSourceId ";
     }
 
     @Override
     public void onSQLiteQueryResult(Cursor cursor) {
-        if(cursor == null){
+        if (cursor == null) {
             setItems(new ArrayList<>());
             return;
         }

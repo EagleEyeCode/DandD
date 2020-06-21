@@ -1,14 +1,17 @@
 package de.eagleeye.dandd.fragments.base;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import de.eagleeye.dandd.activities.MainActivity;
@@ -106,12 +110,24 @@ public abstract class BaseSQLFragment extends Fragment implements SQLRequest.OnQ
 
     public void updateList(){
         if(getActivity() != null) {
-            String searchText = getActivity().getSharedPreferences(onTabName(), Context.MODE_PRIVATE).getString("search", "");
-            search.setText(searchText);
-            adapter.setSearch(search.getText().toString());
-            request = new SQLRequest(onQuery() + getFilter(), this);
-            sqLiteHelper.query(request);
-            paused = false;
+            try {
+                String searchText = getActivity().getSharedPreferences(onTabName(), Context.MODE_PRIVATE).getString("search", "");
+                search.setText(searchText);
+                adapter.setSearch(search.getText().toString());
+                request = new SQLRequest(onQuery() + getFilter(), this);
+                sqLiteHelper.query(request);
+                paused = false;
+            }catch (SQLiteException e){
+                onSQLError(e);
+            }
+        }
+    }
+
+    public void onSQLError(SQLiteException e){
+        Log.e(getClass().getSimpleName(), onTabName(), e);
+        Toast.makeText(getActivity(), R.string.sql_error, Toast.LENGTH_LONG).show();
+        if(getActivity() != null){
+            getActivity().getSharedPreferences(onTabName(), Context.MODE_PRIVATE).edit().clear().apply();
         }
     }
 

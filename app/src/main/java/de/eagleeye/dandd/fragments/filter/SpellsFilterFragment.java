@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import de.eagleeye.dandd.R;
 import de.eagleeye.dandd.fragments.base.BaseFilterFragment;
 import de.eagleeye.dandd.list.FilterCheckListAdapter;
+import de.eagleeye.dandd.list.FilterCheckListItem;
 
 public class SpellsFilterFragment extends BaseFilterFragment {
     private ExpandableLayout sortDropExpandable;
@@ -217,11 +218,43 @@ public class SpellsFilterFragment extends BaseFilterFragment {
     }
 
     private String getSchoolsFilterPart(){
-        return "";
+        if(getActivity() != null){
+            ArrayList<FilterCheckListItem> items = schoolsAdapter.getItems();
+            StringBuilder itemParts = new StringBuilder();
+            for (FilterCheckListItem item : items){
+                if(item.isChecked()){
+                    if(itemParts.length() == 0) {
+                        itemParts.append("((spells.schoolId=").append(item.getId()).append(" AND spells.schoolSourceId=").append(item.getSourceId()).append(")");
+                    } else {
+                        itemParts.append(" OR (spells.schoolId=").append(item.getId()).append(" AND spells.schoolSourceId=").append(item.getSourceId()).append(")");
+                    }
+                }
+            }
+            if(itemParts.length() != 0) itemParts.append(")");
+            return itemParts.toString();
+        }else {
+            return "";
+        }
     }
 
     private String getClassesFilterPart(){
-        return "";
+        if(getActivity() != null){
+            ArrayList<FilterCheckListItem> items = classesAdapter.getItems();
+            StringBuilder itemParts = new StringBuilder();
+            for (FilterCheckListItem item : items){
+                if(item.isChecked()){
+                    if(itemParts.length() == 0) {
+                        itemParts.append("((spellsClasses.classId=").append(item.getId()).append(" AND spellsClasses.classSourceId=").append(item.getSourceId()).append(")");
+                    } else {
+                        itemParts.append(" OR (spellsClasses.classId=").append(item.getId()).append(" AND spellsClasses.classSourceId=").append(item.getSourceId()).append(")");
+                    }
+                }
+            }
+            if(itemParts.length() != 0) itemParts.append(")");
+            return itemParts.toString();
+        }else {
+            return "";
+        }
     }
 
     private String getAdvancedFilterPart(){

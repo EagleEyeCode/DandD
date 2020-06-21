@@ -100,7 +100,7 @@ public class FilterCheckListAdapter extends RecyclerView.Adapter<FilterCheckList
     @Override
     public void onSQLiteQueryResult(Cursor cursor) {
         items = new ArrayList<>();
-        if(cursor.moveToFirst()){
+        if(cursor != null && cursor.moveToFirst()){
             do{
                 items.add(new FilterCheckListItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), false));
             }while (cursor.moveToNext());

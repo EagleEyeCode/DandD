@@ -20,9 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
+import java.util.ArrayList;
+
 import de.eagleeye.dandd.R;
 import de.eagleeye.dandd.fragments.base.BaseFilterFragment;
 import de.eagleeye.dandd.list.FilterCheckListAdapter;
+import de.eagleeye.dandd.list.FilterCheckListItem;
 
 public class ItemsFilterFragment extends BaseFilterFragment {
     private ExpandableLayout sortDropExpandable;
@@ -172,7 +175,23 @@ public class ItemsFilterFragment extends BaseFilterFragment {
     }
 
     private String getTypeFilterPart(){
-        return "";
+        if(getActivity() != null){
+            ArrayList<FilterCheckListItem> items = typesAdapter.getItems();
+            StringBuilder itemParts = new StringBuilder();
+            for (FilterCheckListItem item : items){
+                if(item.isChecked()){
+                    if(itemParts.length() == 0) {
+                        itemParts.append("((items.type=").append(item.getId()).append(" AND items.typeSourceId=").append(item.getSourceId()).append(")");
+                    } else {
+                        itemParts.append(" OR (items.type=").append(item.getId()).append(" AND items.typeSourceId=").append(item.getSourceId()).append(")");
+                    }
+                }
+            }
+            if(itemParts.length() != 0) itemParts.append(")");
+            return itemParts.toString();
+        }else {
+            return "";
+        }
     }
 
     private String getAdvancedFilterPart(){
