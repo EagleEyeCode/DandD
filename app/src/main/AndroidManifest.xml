@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.eagleeye.dandd">
 
+    <uses-feature android:name="android.hardware.camera.ar"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -23,6 +25,8 @@
             android:name=".activities.LoginActivity"
             android:theme="@style/AppLogin" />
         <activity android:name=".activities.MainActivity"/>
+
+        <meta-data android:name="com.google.ar.core" android:value="required"/>
     </application>
 
 </manifest>

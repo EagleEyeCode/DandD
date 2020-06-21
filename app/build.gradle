@@ -45,4 +45,8 @@ dependencies {
 
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
     implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
+    implementation 'com.google.ar.sceneform.ux:sceneform-ux:1.15.0'
+    implementation 'com.google.ar.sceneform:assets:1.15.0'
+
 }
+apply plugin: 'com.google.ar.sceneform.plugin'
