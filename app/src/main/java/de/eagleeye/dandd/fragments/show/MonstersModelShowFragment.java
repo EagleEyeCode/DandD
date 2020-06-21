@@ -52,7 +52,7 @@ public class MonstersModelShowFragment extends BaseDataShowFragment {
                             file = new File(getActivity().getFileStreamPath(""), cursor.getString(0));
                             scale = cursor.getFloat(1);
                         }
-                    }));
+                    }), true);
         }
 
         if(getActivity() != null) {
