@@ -41,7 +41,7 @@ public class MonstersModelShowFragment extends BaseDataShowFragment {
     private float rotateY;
     private float rotateZ;
 
-    private TransformableNode shownModel;
+    private AnchorNode anchorNode;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -111,23 +111,25 @@ public class MonstersModelShowFragment extends BaseDataShowFragment {
 
     private void setupPlane(){
         arFragment.setOnTapArPlaneListener((hitResult, plane, motionEvent) -> {
+            if(anchorNode != null && anchorNode.getAnchor() != null){
+                arFragment.getArSceneView().getScene().removeChild(anchorNode);
+                anchorNode.getAnchor().detach();
+                anchorNode.setParent(null);
+                anchorNode = null;
+            }
+
             Anchor anchor = hitResult.createAnchor();
-            AnchorNode anchorNode = new AnchorNode(anchor);
+            anchorNode = new AnchorNode(anchor);
             anchorNode.setParent(arFragment.getArSceneView().getScene());
             createModel(anchorNode);
         });
     }
 
     private void createModel(AnchorNode anchorNode) {
-        if(shownModel != null && anchorNode.getScene() != null){
-            anchorNode.getScene().removeChild(shownModel);;
-        }
-
         TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
         node.setLocalRotation(Quaternion.axisAngle(new Vector3(rotateX, rotateY, rotateZ), 1f));
         node.setParent(anchorNode);
         node.setRenderable(modelRenderable);
         node.select();
-        shownModel = node;
     }
 }
