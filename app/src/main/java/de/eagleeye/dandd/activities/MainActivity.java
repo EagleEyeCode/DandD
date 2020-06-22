@@ -104,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
             if(sqlFragments.contains(currentFragmentId)){
                 fab.setImageResource(R.drawable.baseline_filter_list_black_18dp);
                 fab.setVisibility(View.VISIBLE);
+            }else if(filterFragments.contains(currentFragmentId)){
+                fab.setImageResource(R.drawable.ok_foreground);
+                fab.setVisibility(View.VISIBLE);
             }else{
                 fab.setVisibility(View.GONE);
             }
@@ -202,13 +205,15 @@ public class MainActivity extends AppCompatActivity {
     private void fabClick(){
         if(mainFragments.contains(currentFragmentId)){
             showFilter();
-        }else {
+        }else if(currentFragmentId == R.id.nav_monsters_show) {
             if(modelMonsterId != null && modelMonsterId.length == 2) {
                 Bundle args = new Bundle();
                 args.putInt("id", modelMonsterId[0]);
                 args.putInt("sourceId", modelMonsterId[1]);
                 navController.navigate(R.id.nav_monsters_model_show, args);
             }
+        }else if(filterFragments.contains(currentFragmentId)){
+            onBackPressed();
         }
     }
 

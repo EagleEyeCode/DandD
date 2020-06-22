@@ -17,6 +17,8 @@ import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.assets.RenderableSource;
+import com.google.ar.sceneform.math.Quaternion;
+import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.BaseArFragment;
@@ -35,6 +37,11 @@ public class MonstersModelShowFragment extends BaseDataShowFragment {
 
     private File file;
     private float scale;
+    private float rotateX;
+    private float rotateY;
+    private float rotateZ;
+
+    private TransformableNode shownModel;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -42,15 +49,21 @@ public class MonstersModelShowFragment extends BaseDataShowFragment {
 
         file = new File("");
         scale = 1.0f;
+        rotateX = 0.0f;
+        rotateY = 0.0f;
+        rotateZ = 0.0f;
 
         Bundle args = getArguments();
         if(args != null) {
             BasicSQLiteHelper db = new BasicSQLiteHelper(getActivity(), "data.db");
-            db.query(new SQLRequest("SELECT files.path, monsters.modelScale FROM monsters LEFT JOIN files ON monsters.modelId=files.id AND monsters.modelSourceId=files.sourceId WHERE monsters.id=" + args.get("id") + " AND monsters.sourceId=" + args.get("sourceId") + ";",
+            db.query(new SQLRequest("SELECT files.path, monsters.modelScale, monsters.modelRotateX, monsters.modelRotateY, monsters.modelRotateZ FROM monsters LEFT JOIN files ON monsters.modelId=files.id AND monsters.modelSourceId=files.sourceId WHERE monsters.id=" + args.get("id") + " AND monsters.sourceId=" + args.get("sourceId") + ";",
                     cursor -> {
                         if (cursor != null && getActivity() != null && cursor.moveToFirst()){
                             file = new File(getActivity().getFileStreamPath(""), cursor.getString(0));
                             scale = cursor.getFloat(1);
+                            rotateX = cursor.getFloat(2);
+                            rotateY = cursor.getFloat(3);
+                            rotateZ = cursor.getFloat(4);
                         }
                     }), true);
         }
@@ -106,9 +119,15 @@ public class MonstersModelShowFragment extends BaseDataShowFragment {
     }
 
     private void createModel(AnchorNode anchorNode) {
+        if(shownModel != null && anchorNode.getScene() != null){
+            anchorNode.getScene().removeChild(shownModel);;
+        }
+
         TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+        node.setLocalRotation(Quaternion.axisAngle(new Vector3(rotateX, rotateY, rotateZ), 1f));
         node.setParent(anchorNode);
         node.setRenderable(modelRenderable);
         node.select();
+        shownModel = node;
     }
 }
