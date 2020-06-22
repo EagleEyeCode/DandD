@@ -32,7 +32,7 @@ public class SpellsFragment extends BaseSQLFragment {
 
     @Override
     protected String onQuery() {
-        return "SELECT DISTINCT spells.id, spells.sourceId, spells.name, spellSchools.name, files.path, IFNULL(spells.level, '0') FROM spells LEFT JOIN spellSchools ON spells.schoolId = spellSchools.id AND spells.schoolSourceID=spellSchools.sourceId LEFT JOIN files ON spellSchools.imageId = files.id AND spellSchools.imageSourceId=files.sourceId JOIN spellsClasses ON spells.id=spellsClasses.spellId AND spells.sourceId=spellsClasses.spellSourceId ";
+        return "SELECT DISTINCT spells.id, spells.sourceId, spells.name, spellSchools.name, files.path, IFNULL(spells.level, '0'), f.path FROM spells LEFT JOIN spellSchools ON spells.schoolId = spellSchools.id AND spells.schoolSourceID=spellSchools.sourceId LEFT JOIN files ON spellSchools.imageId = files.id AND spellSchools.imageSourceId=files.sourceId JOIN spellsClasses ON spells.id=spellsClasses.spellId AND spells.sourceId=spellsClasses.spellSourceId LEFT JOIN files f ON spells.imageId = f.id AND spells.imageSourceId=f.sourceId ";
     }
 
     @Override
@@ -49,7 +49,9 @@ public class SpellsFragment extends BaseSQLFragment {
         if (cursor.moveToFirst()) {
             ArrayList<BasicListItem> items = new ArrayList<>();
             do {
-                items.add(new BasicListItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), "Level " + cursor.getString(5) + " " + cursor.getString(3) + " Spell", cursor.getString(4)));
+                String image = cursor.getString(6);
+                if(image == null) image = cursor.getString(4);
+                items.add(new BasicListItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), "Level " + cursor.getString(5) + " " + cursor.getString(3) + " Spell", image));
             } while (cursor.moveToNext());
             setItems(items);
         }

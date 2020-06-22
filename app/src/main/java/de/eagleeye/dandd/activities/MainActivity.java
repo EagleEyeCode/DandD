@@ -1,5 +1,6 @@
 package de.eagleeye.dandd.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,7 +8,9 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -67,6 +70,28 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                hideKeyboard(MainActivity.this);
+            }
+        });
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_sources, R.id.nav_books, R.id.nav_items, R.id.nav_spells, R.id.nav_monsters)
                 .setDrawerLayout(drawer)
@@ -75,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_main_content);
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             currentFragmentId = destination.getId();
+            hideKeyboard(MainActivity.this);
             if(sqlFragments.contains(currentFragmentId)){
                 fab.setImageResource(R.drawable.baseline_filter_list_black_18dp);
                 fab.setVisibility(View.VISIBLE);
@@ -103,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        hideKeyboard(this);
         switch (item.getItemId()) {
             case android.R.id.home:
                 if(mainFragments.contains(currentFragmentId)) {
@@ -213,5 +240,16 @@ public class MainActivity extends AppCompatActivity {
         }else {
             fab.setVisibility(View.GONE);
         }
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

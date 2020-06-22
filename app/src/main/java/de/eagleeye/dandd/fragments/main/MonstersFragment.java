@@ -31,7 +31,7 @@ public class MonstersFragment extends BaseSQLFragment {
 
     @Override
     protected String onQuery() {
-        return "SELECT monsters.id, monsters.sourceId, monsters.name, monsterTypes.name FROM monsters LEFT JOIN monsterTypes ON monsters.typeId=monsterTypes.id AND monsters.typeSourceId=monsterTypes.sourceId ";
+        return "SELECT monsters.id, monsters.sourceId, monsters.name, monsterTypes.name, files.path, f.path FROM monsters LEFT JOIN monsterTypes ON monsters.typeId=monsterTypes.id AND monsters.typeSourceId=monsterTypes.sourceId LEFT JOIN files ON monsterTypes.imageId = files.id AND monsterTypes.imageSourceId=files.sourceId LEFT JOIN files f ON monsters.imageId = f.id AND monsters.imageSourceId=f.sourceId ";
     }
 
     @Override
@@ -48,7 +48,9 @@ public class MonstersFragment extends BaseSQLFragment {
         if (cursor.moveToFirst()) {
             ArrayList<BasicListItem> items = new ArrayList<>();
             do {
-                BasicListItem item = new BasicListItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getString(3), "");
+                String image = cursor.getString(5);
+                if(image == null) image = cursor.getString(4);
+                BasicListItem item = new BasicListItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getString(3), image);
                 items.add(item);
             } while (cursor.moveToNext());
             setItems(items);

@@ -21,7 +21,8 @@
         style="@style/Widget.AppCompat.SearchView"
         android:layout_weight="0.9"
         android:textStyle="normal"
-        android:inputType="textFilter"
-        android:hint="@string/search"/>
+        android:inputType="textPersonName"
+        android:hint="@string/search"
+        android:imeOptions="actionDone"/>
 
 </LinearLayout>
