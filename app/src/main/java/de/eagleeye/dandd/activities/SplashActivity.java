@@ -47,6 +47,10 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        getSharedPreferences("books", Context.MODE_PRIVATE).edit().clear().apply();
+        getSharedPreferences("items", Context.MODE_PRIVATE).edit().clear().apply();
+        getSharedPreferences("spells", Context.MODE_PRIVATE).edit().clear().apply();
+        getSharedPreferences("monsters", Context.MODE_PRIVATE).edit().clear().apply();
         new UpdateTask().execute("");
     }
 
@@ -306,10 +310,6 @@ public class SplashActivity extends AppCompatActivity {
             }
 
             if (unzipped) {
-                getSharedPreferences("books", Context.MODE_PRIVATE).edit().clear().apply();
-                getSharedPreferences("items", Context.MODE_PRIVATE).edit().clear().apply();
-                getSharedPreferences("spells", Context.MODE_PRIVATE).edit().clear().apply();
-                getSharedPreferences("monsters", Context.MODE_PRIVATE).edit().clear().apply();
                 Log.d(SplashActivity.this.getClass().getSimpleName(), "Successfully installed " + pack.getString("name"));
             } else {
                 Log.d(SplashActivity.this.getClass().getSimpleName(), "Failed to install " + pack.getString("name"));

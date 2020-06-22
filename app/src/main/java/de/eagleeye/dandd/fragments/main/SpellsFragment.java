@@ -36,6 +36,11 @@ public class SpellsFragment extends BaseSQLFragment {
     }
 
     @Override
+    protected String onDefaultFilter() {
+        return "ORDER BY spells.name ASC";
+    }
+
+    @Override
     public void onSQLiteQueryResult(Cursor cursor) {
         if (cursor == null) {
             setItems(new ArrayList<>());

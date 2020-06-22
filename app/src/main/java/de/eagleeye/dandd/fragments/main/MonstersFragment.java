@@ -35,6 +35,11 @@ public class MonstersFragment extends BaseSQLFragment {
     }
 
     @Override
+    protected String onDefaultFilter() {
+        return " ORDER BY monsters.name ASC;";
+    }
+
+    @Override
     public void onSQLiteQueryResult(Cursor cursor) {
         if(cursor == null){
             setItems(new ArrayList<>());

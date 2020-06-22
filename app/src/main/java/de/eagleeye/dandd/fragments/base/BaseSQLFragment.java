@@ -42,6 +42,7 @@ public abstract class BaseSQLFragment extends Fragment implements SQLRequest.OnQ
     protected abstract int onRecyclerViewID();
     protected abstract String onTabName();
     protected abstract String onQuery();
+    protected abstract String onDefaultFilter();
 
     private boolean paused;
 
@@ -133,7 +134,7 @@ public abstract class BaseSQLFragment extends Fragment implements SQLRequest.OnQ
 
     private String getFilter(){
         if(getActivity() != null) {
-            return getActivity().getSharedPreferences(onTabName(), Context.MODE_PRIVATE).getString("filter", "");
+            return getActivity().getSharedPreferences(onTabName(), Context.MODE_PRIVATE).getString("filter", onDefaultFilter());
         }else {
             return "";
         }

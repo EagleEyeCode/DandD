@@ -35,6 +35,11 @@ public class BooksFragment extends BaseSQLFragment {
     }
 
     @Override
+    protected String onDefaultFilter() {
+        return ";";
+    }
+
+    @Override
     public void onSQLiteQueryResult(Cursor cursor) {
         if(cursor == null){
             setItems(new ArrayList<>());

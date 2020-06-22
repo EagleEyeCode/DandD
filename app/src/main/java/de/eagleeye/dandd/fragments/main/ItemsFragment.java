@@ -35,6 +35,11 @@ public class ItemsFragment extends BaseSQLFragment {
     }
 
     @Override
+    protected String onDefaultFilter() {
+        return " ORDER BY items.name ASC;";
+    }
+
+    @Override
     public void onSQLiteQueryResult(Cursor cursor) {
         if(cursor == null){
             setItems(new ArrayList<>());
