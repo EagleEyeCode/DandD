@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import de.eagleeye.dandd.R;
 import de.eagleeye.dandd.fragments.base.BaseFilterFragment;
 import de.eagleeye.dandd.list.FilterCheckListAdapter;
 import de.eagleeye.dandd.list.FilterCheckListItem;
+import de.eagleeye.dandd.list.NoScrollLinearLayoutManager;
 
 public class ItemsFilterFragment extends BaseFilterFragment {
     private ExpandableLayout sortDropExpandable;
@@ -75,9 +77,10 @@ public class ItemsFilterFragment extends BaseFilterFragment {
 
         types = view.findViewById(R.id.fragment_filter_items_types);
         typesAdapter = new FilterCheckListAdapter(getActivity(), "SELECT id, sourceId, name FROM itemTypes;");
-        types.setLayoutManager(new LinearLayoutManager(getActivity()));
+        types.setLayoutManager(new NoScrollLinearLayoutManager(getActivity()));
         types.setHasFixedSize(true);
         types.setAdapter(typesAdapter);
+        types.setNestedScrollingEnabled(false);
 
         magic = view.findViewById(R.id.filter_items_magic);
         valueOperation = view.findViewById(R.id.filter_items_value_operation);

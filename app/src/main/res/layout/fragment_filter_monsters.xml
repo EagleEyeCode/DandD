@@ -126,10 +126,16 @@
             android:layout_height="wrap_content"
             app:el_expanded="false">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/fragment_filter_monsters_alignments_list"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/fragment_filter_monsters_alignments_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
 
         </net.cachapa.expandablelayout.ExpandableLayout>
 
@@ -165,10 +171,16 @@
             android:layout_height="wrap_content"
             app:el_expanded="false">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/fragment_filter_monsters_types_list"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/fragment_filter_monsters_types_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
 
         </net.cachapa.expandablelayout.ExpandableLayout>
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,6 +25,7 @@ import de.eagleeye.dandd.R;
 import de.eagleeye.dandd.fragments.base.BaseFilterFragment;
 import de.eagleeye.dandd.list.FilterCheckListAdapter;
 import de.eagleeye.dandd.list.FilterCheckListItem;
+import de.eagleeye.dandd.list.NoScrollLinearLayoutManager;
 
 public class MonsterFilterFragment extends BaseFilterFragment {
     private ExpandableLayout sortDropExpandable;
@@ -83,15 +85,17 @@ public class MonsterFilterFragment extends BaseFilterFragment {
 
         alignments = view.findViewById(R.id.fragment_filter_monsters_alignments_list);
         alignmentsAdapter = new FilterCheckListAdapter(getActivity(), "SELECT id, sourceId, text FROM alignments;");
-        alignments.setLayoutManager(new LinearLayoutManager(getActivity()));
+        alignments.setLayoutManager(new NoScrollLinearLayoutManager(getActivity()));
         alignments.setHasFixedSize(true);
         alignments.setAdapter(alignmentsAdapter);
+        alignments.setNestedScrollingEnabled(false);
 
         types = view.findViewById(R.id.fragment_filter_monsters_types_list);
         typesAdapter = new FilterCheckListAdapter(getActivity(), "SELECT id, sourceId, name FROM monsterTypes;");
-        types.setLayoutManager(new LinearLayoutManager(getActivity()));
+        types.setLayoutManager(new NoScrollLinearLayoutManager(getActivity()));
         types.setHasFixedSize(true);
         types.setAdapter(typesAdapter);
+        types.setNestedScrollingEnabled(false);
 
         hpOperation = view.findViewById(R.id.filter_monsters_hp_operation);
         hp = view.findViewById(R.id.filter_monsters_hp_number);

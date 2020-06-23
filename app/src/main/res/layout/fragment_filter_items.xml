@@ -127,10 +127,16 @@
             android:layout_height="wrap_content"
             app:el_expanded="false">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/fragment_filter_items_types"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/fragment_filter_items_types"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
 
         </net.cachapa.expandablelayout.ExpandableLayout>
 

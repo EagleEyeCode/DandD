@@ -24,6 +24,7 @@ import de.eagleeye.dandd.R;
 import de.eagleeye.dandd.fragments.base.BaseFilterFragment;
 import de.eagleeye.dandd.list.FilterCheckListAdapter;
 import de.eagleeye.dandd.list.FilterCheckListItem;
+import de.eagleeye.dandd.list.NoScrollLinearLayoutManager;
 
 public class SpellsFilterFragment extends BaseFilterFragment {
     private ExpandableLayout sortDropExpandable;
@@ -90,15 +91,17 @@ public class SpellsFilterFragment extends BaseFilterFragment {
 
         schools = view.findViewById(R.id.fragment_filter_spells_schools_list);
         schoolsAdapter = new FilterCheckListAdapter(getActivity(), "SELECT id, sourceId, name FROM spellSchools;");
-        schools.setLayoutManager(new LinearLayoutManager(getActivity()));
+        schools.setLayoutManager(new NoScrollLinearLayoutManager(getActivity()));
         schools.setHasFixedSize(true);
         schools.setAdapter(schoolsAdapter);
+        schools.setNestedScrollingEnabled(false);
 
         classes = view.findViewById(R.id.fragment_filter_spells_classes_list);
         classesAdapter = new FilterCheckListAdapter(getActivity(), "SELECT id, sourceId, name FROM classes;");
-        classes.setLayoutManager(new LinearLayoutManager(getActivity()));
+        classes.setLayoutManager(new NoScrollLinearLayoutManager(getActivity()));
         classes.setHasFixedSize(true);
         classes.setAdapter(classesAdapter);
+        classes.setNestedScrollingEnabled(false);
 
         levelOperation = view.findViewById(R.id.filter_spells_level_operation);
         level = view.findViewById(R.id.filter_spells_level_number);
