@@ -94,4 +94,10 @@
     <string name="hp">HP</string>
     <string name="size">Size</string>
     <string name="sql_error">SQL Error, removing Filter...</string>
+    <string name="str">STR</string>
+    <string name="dex">DEX</string>
+    <string name="con">CON</string>
+    <string name="INT">INT</string>
+    <string name="wis">WIS</string>
+    <string name="cha">CHA</string>
 </resources>

@@ -1,6 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_show_monster_base_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="0.96"
+            android:layout_marginTop="5dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.16"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="@color/textDarKRed"/>
+
+                <TextView
+                    android:id="@+id/fragment_show_monster_str"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/textLightRed"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.16"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dex"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="@color/textDarKRed"/>
+
+                <TextView
+                    android:id="@+id/fragment_show_monster_dex"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/textLightRed"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.16"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/con"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="@color/textDarKRed"/>
+
+                <TextView
+                    android:id="@+id/fragment_show_monster_con"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/textLightRed"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.16"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/INT"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="@color/textDarKRed"/>
+
+                <TextView
+                    android:id="@+id/fragment_show_monster_int"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/textLightRed"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.16"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wis"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="@color/textDarKRed"/>
+
+                <TextView
+                    android:id="@+id/fragment_show_monster_wis"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/textLightRed"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.16"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cha"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="@color/textDarKRed"/>
+
+                <TextView
+                    android:id="@+id/fragment_show_monster_cha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/textLightRed"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_show_monster_saving_throws"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_show_monster_skills"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_show_monster_traits"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_show_monster_actions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+</ScrollView>
