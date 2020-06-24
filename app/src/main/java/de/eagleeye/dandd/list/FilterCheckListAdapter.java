@@ -102,11 +102,16 @@ public class FilterCheckListAdapter extends RecyclerView.Adapter<FilterCheckList
         items = new ArrayList<>();
         if(cursor != null && cursor.moveToFirst()){
             do{
-                items.add(new FilterCheckListItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), false));
+                items.add(new FilterCheckListItem(cursor.getInt(0), cursor.getInt(1), firstCharacterToUpperCase(cursor.getString(2)), false));
             }while (cursor.moveToNext());
         }
         Collections.sort(items);
         notifyDataSetChanged();
+    }
+
+    private String firstCharacterToUpperCase(String s){
+        String s1 = s.substring(0, 1).toUpperCase();
+        return s1 + s.substring(1);
     }
 
 

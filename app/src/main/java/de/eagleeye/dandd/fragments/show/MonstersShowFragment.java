@@ -5,13 +5,17 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewManager;
 import android.widget.ArrayAdapter;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
@@ -40,8 +44,14 @@ public class MonstersShowFragment extends BaseDataShowFragment {
 
     private ArrayList<BasicShowListItem> baseListItems;
     private ArrayList<BasicShowListItem> savingThrowsListItems;
+    private ArrayList<BasicShowListItem> skillsListItems;
     private ArrayList<SpannableStringBuilder> traitsListItems;
     private ArrayList<ActionListItem> actionListItems;
+
+    private ExpandableLayout savingThrowsCard;
+    private ExpandableLayout skillsCard;
+    private ExpandableLayout traitsCard;
+    private ExpandableLayout actionsCard;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -68,8 +78,14 @@ public class MonstersShowFragment extends BaseDataShowFragment {
         RecyclerView traitsList = view.findViewById(R.id.fragment_show_monster_traits);
         RecyclerView actionsList = view.findViewById(R.id.fragment_show_monster_actions);
 
+        savingThrowsCard = view.findViewById(R.id.fragment_show_monster_card_saving_throws);
+        skillsCard = view.findViewById(R.id.fragment_show_monster_card_skills);
+        traitsCard = view.findViewById(R.id.fragment_show_monster_card_traits);
+        actionsCard = view.findViewById(R.id.fragment_show_monster_card_actions);
+
         baseListItems = new ArrayList<>();
         savingThrowsListItems = new ArrayList<>();
+        skillsListItems = new ArrayList<>();
         traitsListItems = new ArrayList<>();
         actionListItems = new ArrayList<>();
 
@@ -198,6 +214,14 @@ public class MonstersShowFragment extends BaseDataShowFragment {
             }
         });
 
+        SQLRequest skills = new SQLRequest("", cursor -> {
+            if(cursor != null && cursor.moveToFirst()){
+                do{
+
+                } while(cursor.moveToNext());
+            }
+        });
+
         SQLRequest traits = new SQLRequest("SELECT name, text FROM traits WHERE monsterId=" + getDataId() + " AND monsterSourceId=" + getDataSourceId(), cursor -> {
             if(cursor != null && cursor.moveToFirst()){
                 do{
@@ -250,6 +274,8 @@ public class MonstersShowFragment extends BaseDataShowFragment {
         actionsList.setLayoutManager(new NoScrollLinearLayoutManager(getActivity()));
         actionsList.setHasFixedSize(true);
         actionsList.setAdapter(actionsAdapter);
+
+        removeNotUsedCards();
     }
 
     @Override
@@ -260,6 +286,13 @@ public class MonstersShowFragment extends BaseDataShowFragment {
     @Override
     protected int layoutId() {
         return R.layout.fragment_show_monster;
+    }
+
+    private void removeNotUsedCards(){
+        if(savingThrowsListItems.size() == 0) savingThrowsCard.setExpanded(false, false);
+        if(skillsListItems.size() == 0) skillsCard.setExpanded(false, false);
+        if(traitsListItems.size() == 0) traitsCard.setExpanded(false, false);
+        if(actionListItems.size() == 0) actionsCard.setExpanded(false, false);
     }
 
     private boolean hasModel(){
@@ -337,6 +370,30 @@ public class MonstersShowFragment extends BaseDataShowFragment {
     }
 
     private String getEnvironmentString(String environment) {
-        return String.valueOf(environment);
+        int value = Integer.parseInt(environment);
+        ArrayList<String> environments = new ArrayList<>();
+        if(isBitSet(value, 0)) environments.add("Arctic");
+        if(isBitSet(value, 1)) environments.add("Coastal");
+        if(isBitSet(value, 2)) environments.add("Dessert");
+        if(isBitSet(value, 3)) environments.add("Forest");
+        if(isBitSet(value, 4)) environments.add("Grassland");
+        if(isBitSet(value, 5)) environments.add("Hill");
+        if(isBitSet(value, 6)) environments.add("Mountain");
+        if(isBitSet(value, 7)) environments.add("Swamp");
+        if(isBitSet(value, 8)) environments.add("Underdark");
+        if(isBitSet(value, 9)) environments.add("Underwater");
+        if(isBitSet(value, 10)) environments.add("Urban");
+
+        StringBuilder environmentString = new StringBuilder();
+        for(String s : environments){
+            if(environmentString.length() != 0) environmentString.append(", ");
+            environmentString.append(s);
+        }
+
+        return environmentString.toString();
+    }
+
+    private boolean isBitSet(int integer, int index){
+        return (integer & (1 << index)) != 0;
     }
 }

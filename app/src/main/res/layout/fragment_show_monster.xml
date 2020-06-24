@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -193,113 +193,133 @@
         </androidx.cardview.widget.CardView>
 
 
-        <androidx.cardview.widget.CardView
+        <net.cachapa.expandablelayout.ExpandableLayout
             android:id="@+id/fragment_show_monster_card_saving_throws"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/fragment_show_monster_card_abilities"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp">
-            <RelativeLayout
+            app:el_expanded="true">
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp">
-
-                <TextView
-                    android:id="@+id/fragment_show_monster_caption_saving_throws"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textStyle="bold"
-                    android:text="@string/saving_throws"
-                    android:layout_marginBottom="5dp"/>
+                    android:layout_margin="5dp">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/fragment_show_monster_saving_throws"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/fragment_show_monster_caption_saving_throws"/>
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/fragment_show_monster_caption_saving_throws"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:text="@string/saving_throws"
+                        android:layout_marginBottom="5dp"/>
 
-        <androidx.cardview.widget.CardView
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/fragment_show_monster_saving_throws"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/fragment_show_monster_caption_saving_throws"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </net.cachapa.expandablelayout.ExpandableLayout>
+
+        <net.cachapa.expandablelayout.ExpandableLayout
             android:id="@+id/fragment_show_monster_card_skills"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/fragment_show_monster_card_saving_throws"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp">
-            <RelativeLayout
+            app:el_expanded="true">
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp">
-
-                <TextView
-                    android:id="@+id/fragment_show_monster_caption_skills"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textStyle="bold"
-                    android:text="@string/skills"/>
+                    android:layout_margin="5dp">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/fragment_show_monster_skills"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/fragment_show_monster_caption_skills"/>
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/fragment_show_monster_caption_skills"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:text="@string/skills"/>
 
-        <androidx.cardview.widget.CardView
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/fragment_show_monster_skills"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/fragment_show_monster_caption_skills"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </net.cachapa.expandablelayout.ExpandableLayout>
+
+        <net.cachapa.expandablelayout.ExpandableLayout
             android:id="@+id/fragment_show_monster_card_traits"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/fragment_show_monster_card_skills"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp">
-            <RelativeLayout
+            app:el_expanded="true">
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp">
-
-                <TextView
-                    android:id="@+id/fragment_show_monster_caption_traits"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textStyle="bold"
-                    android:text="@string/traits"/>
+                    android:layout_margin="5dp">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/fragment_show_monster_traits"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/fragment_show_monster_caption_traits"/>
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/fragment_show_monster_caption_traits"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:text="@string/traits"/>
 
-        <androidx.cardview.widget.CardView
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/fragment_show_monster_traits"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/fragment_show_monster_caption_traits"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </net.cachapa.expandablelayout.ExpandableLayout>
+
+        <net.cachapa.expandablelayout.ExpandableLayout
             android:id="@+id/fragment_show_monster_card_actions"
-            android:layout_below="@+id/fragment_show_monster_card_traits"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp">
-            <RelativeLayout
+            android:layout_below="@+id/fragment_show_monster_card_traits"
+            app:el_expanded="true">
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp">
-
-                <TextView
-                    android:id="@+id/fragment_show_monster_caption_actions"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textStyle="bold"
-                    android:text="@string/actions"/>
+                    android:layout_margin="5dp">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/fragment_show_monster_actions"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/fragment_show_monster_caption_actions"/>
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/fragment_show_monster_caption_actions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:text="@string/actions"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/fragment_show_monster_actions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/fragment_show_monster_caption_actions"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </net.cachapa.expandablelayout.ExpandableLayout>
     </RelativeLayout>
 </ScrollView>

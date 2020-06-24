@@ -50,7 +50,7 @@ public class MonstersFragment extends BaseSQLFragment {
             do {
                 String image = cursor.getString(5);
                 if(image == null) image = cursor.getString(4);
-                BasicListItem item = new BasicListItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getString(3), image);
+                BasicListItem item = new BasicListItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), firstCharacterToUpperCase(cursor.getString(3)), image);
                 items.add(item);
             } while (cursor.moveToNext());
             setItems(items);
@@ -66,5 +66,10 @@ public class MonstersFragment extends BaseSQLFragment {
             args.putInt("sourceId", item.getSourceId());
             navController.navigate(R.id.nav_monsters_show, args);
         }
+    }
+
+    private String firstCharacterToUpperCase(String s){
+        String s1 = s.substring(0, 1).toUpperCase();
+        return s1 + s.substring(1);
     }
 }
