@@ -1,8 +1,12 @@
 package de.eagleeye.dandd.fragments.show;
 
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,9 +19,12 @@ import java.util.concurrent.atomic.AtomicReference;
 import de.eagleeye.dandd.R;
 import de.eagleeye.dandd.activities.MainActivity;
 import de.eagleeye.dandd.fragments.base.BaseDataShowFragment;
+import de.eagleeye.dandd.list.ActionListAdapter;
+import de.eagleeye.dandd.list.ActionListItem;
 import de.eagleeye.dandd.list.BasicShowListAdapter;
 import de.eagleeye.dandd.list.BasicShowListItem;
 import de.eagleeye.dandd.list.NoScrollLinearLayoutManager;
+import de.eagleeye.dandd.list.TextListAdapter;
 import de.eagleeye.dandd.sql.BasicSQLiteHelper;
 import de.eagleeye.dandd.sql.SQLRequest;
 
@@ -31,13 +38,10 @@ public class MonstersShowFragment extends BaseDataShowFragment {
     private TextView wis;
     private TextView cha;
 
-    private RecyclerView savingThrowsList;
-    private RecyclerView skillsList;
-    private RecyclerView traitsList;
-    private RecyclerView actionsList;
-
     private ArrayList<BasicShowListItem> baseListItems;
     private ArrayList<BasicShowListItem> savingThrowsListItems;
+    private ArrayList<SpannableStringBuilder> traitsListItems;
+    private ArrayList<ActionListItem> actionListItems;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -59,13 +63,15 @@ public class MonstersShowFragment extends BaseDataShowFragment {
         wis = view.findViewById(R.id.fragment_show_monster_wis);
         cha = view.findViewById(R.id.fragment_show_monster_cha);
 
-        savingThrowsList = view.findViewById(R.id.fragment_show_monster_saving_throws);
-        skillsList = view.findViewById(R.id.fragment_show_monster_skills);
-        traitsList = view.findViewById(R.id.fragment_show_monster_traits);
-        actionsList = view.findViewById(R.id.fragment_show_monster_actions);
+        RecyclerView savingThrowsList = view.findViewById(R.id.fragment_show_monster_saving_throws);
+        RecyclerView skillsList = view.findViewById(R.id.fragment_show_monster_skills);
+        RecyclerView traitsList = view.findViewById(R.id.fragment_show_monster_traits);
+        RecyclerView actionsList = view.findViewById(R.id.fragment_show_monster_actions);
 
         baseListItems = new ArrayList<>();
         savingThrowsListItems = new ArrayList<>();
+        traitsListItems = new ArrayList<>();
+        actionListItems = new ArrayList<>();
 
         BasicSQLiteHelper db = new BasicSQLiteHelper(getActivity(), "data.db");
 
@@ -131,6 +137,10 @@ public class MonstersShowFragment extends BaseDataShowFragment {
                 if(!vulnerable.equals("null")){
                     baseListItems.add(new BasicShowListItem("Vulnerable:", vulnerable));
                 }
+                String environment = cursor.getString(15);
+                if(!environment.equals("null")){
+                    baseListItems.add(new BasicShowListItem("Environment:", getEnvironmentString(environment)));
+                }
             }
         });
 
@@ -188,10 +198,34 @@ public class MonstersShowFragment extends BaseDataShowFragment {
             }
         });
 
+        SQLRequest traits = new SQLRequest("SELECT name, text FROM traits WHERE monsterId=" + getDataId() + " AND monsterSourceId=" + getDataSourceId(), cursor -> {
+            if(cursor != null && cursor.moveToFirst()){
+                do{
+                    String name = cursor.getString(0);
+                    SpannableStringBuilder str = new SpannableStringBuilder(name + ".   " + cursor.getString(1));
+                    str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, name.length() + 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    traitsListItems.add(str);
+                } while(cursor.moveToNext());
+            }
+        });
+
+        SQLRequest actions = new SQLRequest("SELECT actions.name, actions.text, actions.legendary, actions.recharge, attacks.name, attacks.atk, attacks.dmg FROM monsterAction LEFT JOIN actions ON monsterAction.actionId=actions.id AND monsterAction.actionSourceId=actions.sourceId LEFT JOIN attacks ON actions.attackId=attacks.id AND actions.attackSourceId=attacks.sourceId WHERE monsterAction.monsterId=" + getDataId() + " AND monsterAction.monsterSourceId=" + getDataSourceId() + ";", cursor -> {
+            if(cursor != null && cursor.moveToFirst()){
+                do{
+                    boolean legendary = false;
+                    if(cursor.getString(2).equals("True")) legendary = true;
+                    Log.d("Legendary", cursor.getString(2));
+                    actionListItems.add(new ActionListItem(cursor.getString(0), cursor.getString(1), legendary, cursor.getInt(3), cursor.getString(4), cursor.getInt(5), cursor.getString(6)));
+                } while (cursor.moveToNext());
+            }
+        });
+
         db.query(languages, true);
         db.query(base, true);
         db.query(abilities, true);
         db.query(savingThrows, true);
+        db.query(traits, true);
+        db.query(actions, true);
 
         BasicShowListAdapter baseListAdapter = new BasicShowListAdapter();
         baseListAdapter.setItems(baseListItems);
@@ -205,6 +239,17 @@ public class MonstersShowFragment extends BaseDataShowFragment {
         savingThrowsList.setHasFixedSize(true);
         savingThrowsList.setAdapter(savingThrowsAdapter);
 
+        TextListAdapter traitsAdapter = new TextListAdapter();
+        traitsAdapter.setItems(traitsListItems);
+        traitsList.setLayoutManager(new NoScrollLinearLayoutManager(getActivity()));
+        traitsList.setHasFixedSize(true);
+        traitsList.setAdapter(traitsAdapter);
+
+        ActionListAdapter actionsAdapter = new ActionListAdapter();
+        actionsAdapter.setItems(actionListItems);
+        actionsList.setLayoutManager(new NoScrollLinearLayoutManager(getActivity()));
+        actionsList.setHasFixedSize(true);
+        actionsList.setAdapter(actionsAdapter);
     }
 
     @Override
@@ -289,5 +334,9 @@ public class MonstersShowFragment extends BaseDataShowFragment {
             modifier = (int) partB;
             return value + " (+" + modifier + ")";
         }
+    }
+
+    private String getEnvironmentString(String environment) {
+        return String.valueOf(environment);
     }
 }

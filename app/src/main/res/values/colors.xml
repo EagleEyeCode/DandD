@@ -7,7 +7,4 @@
     <color name="loginButtonColor">#00000000</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
-
-    <color name="textDarKRed">#610000</color>
-    <color name="textLightRed">#7C0000</color>
 </resources>

@@ -100,4 +100,10 @@
     <string name="INT">INT</string>
     <string name="wis">WIS</string>
     <string name="cha">CHA</string>
+    <string name="general">General</string>
+    <string name="abilities">Abilities</string>
+    <string name="saving_throws">Saving Throws</string>
+    <string name="traits">Traits</string>
+    <string name="actions">Actions</string>
+    <string name="skills">Skills</string>
 </resources>
